@@ -133,14 +133,14 @@ export const ProposalHub: React.FC = () => {
             <div className="flex flex-wrap items-center gap-2.5">
               <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[11px] font-hub-heading font-extrabold tracking-wide uppercase bg-[#091D12] text-[#00FF88] border border-[#00FF88]/30 shadow-xs">
                 <span className="w-2 h-2 rounded-full bg-[#00FF88] neon-dot-pulsing shrink-0" />
-                <span>Executive Proposal Control Room</span>
+                <span>ONLINEFIRST HUB</span>
               </span>
               <span className="text-[#7EA88E] font-mono text-[11px] hidden sm:inline">
-                OnlineFirst Studio • Version 2.2
+                Scholarly Publishing Systems • Version 2.2
               </span>
               <span className="text-[#153322] hidden sm:inline">•</span>
               <span className="text-[#BCE0CA] text-[11px]">
-                Prepared for: <strong className="text-white">CITN Umuahia Chapter & MOUAU COLMAS</strong>
+                Proposal Presentation for: <strong className="text-white">Tax Frontier</strong> (CITN Umuahia Chapter & MOUAU COLMAS)
               </span>
             </div>
 
@@ -167,43 +167,50 @@ export const ProposalHub: React.FC = () => {
           {/* Hero Main Headline & Quick Action Command Bar */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center pt-2">
             <div className="lg:col-span-8 space-y-4">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-[#07150E] border border-[#112A1B] text-xs text-[#BFE2CD]">
-                <BookOpen className="w-3.5 h-3.5 text-[#00FF88]" />
-                <span>Joint Refereed Academic & Professional Journal Publishing Architecture</span>
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#07150E] border border-[#112A1B] text-xs text-[#00FF88] font-mono uppercase tracking-wider">
+                <Sparkles className="w-3.5 h-3.5 text-[#00FF88]" />
+                <span>ONLINEFIRST HUB | Scholarly Publishing Systems</span>
               </div>
 
               <h1 className="text-3xl sm:text-5xl lg:text-6xl font-hub-heading font-extrabold text-white tracking-tight leading-[1.08] neon-headline-glow">
-                Tax Frontier: <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-[#C7FFDE] to-[#00FF88]">Navigating the New Era</span> of Taxation
+                Welcome to OnlineFirst
+                <span className="block mt-2 text-2xl sm:text-4xl lg:text-5xl text-transparent bg-clip-text bg-gradient-to-r from-white via-[#C7FFDE] to-[#00FF88]">
+                  Reimagining the Digital Future of Tax Frontier
+                </span>
               </h1>
 
               <p className="text-sm sm:text-base text-[#B8DEC6] max-w-2xl leading-relaxed font-normal">
-                An end-to-end publishing system proposal delivering three bespoke interactive design prototypes, configurable manuscript intake routing, federated JORMASS gateway models, and transparent, fixed-price commercial packages structured from <strong>₦450,000</strong> to <strong>₦950,000</strong>.
+                Following our review of the Tax Frontier publishing requirements, OnlineFirst has developed three distinct digital directions designed to strengthen the journal’s academic and professional presence, improve research discovery, support manuscript and editorial workflows, and give the editorial team greater control over publications, announcements and ongoing content.
               </p>
 
               {/* Action Command Row with Glowing Neon Buttons */}
               <div className="pt-2 flex flex-wrap items-center gap-3">
                 <button
-                  onClick={() => setActiveHubSection('three-concepts')}
-                  className="neon-glow-btn px-5 py-3 rounded-xl font-hub-heading font-bold text-xs sm:text-sm flex items-center gap-2 transition-all"
+                  onClick={() => {
+                    setActiveHubSection('three-concepts');
+                    const el = document.getElementById('proposal-workspace');
+                    if (el) {
+                      el.scrollIntoView({ behavior: 'smooth' });
+                    }
+                  }}
+                  className="neon-glow-btn px-6 py-3.5 rounded-xl font-hub-heading font-bold text-xs sm:text-sm flex items-center gap-2 transition-all shadow-[0_0_20px_rgba(0,255,136,0.25)]"
                 >
-                  <span>Explore 3 Interactive Demos</span>
+                  <span>Explore the 3 Concepts</span>
                   <ArrowRight className="w-4 h-4 text-[#030A06]" />
                 </button>
 
                 <button
-                  onClick={() => setActiveHubSection('commercial-proposal')}
-                  className="neon-glow-btn-secondary px-5 py-3 rounded-xl font-hub-heading font-semibold text-xs sm:text-sm flex items-center gap-2 transition-all"
+                  onClick={() => {
+                    setActiveHubSection('executive-summary');
+                    const el = document.getElementById('proposal-workspace');
+                    if (el) {
+                      el.scrollIntoView({ behavior: 'smooth' });
+                    }
+                  }}
+                  className="neon-glow-btn-secondary px-6 py-3.5 rounded-xl font-hub-heading font-semibold text-xs sm:text-sm flex items-center gap-2 transition-all"
                 >
-                  <DollarSign className="w-4 h-4 text-[#00FF88]" />
-                  <span>Review Packages & Pricing</span>
-                </button>
-
-                <button
-                  onClick={() => setActiveHubSection('acceptance-workflow')}
-                  className="neon-glow-btn-secondary px-5 py-3 rounded-xl font-hub-heading font-semibold text-xs sm:text-sm flex items-center gap-2 transition-all"
-                >
-                  <FileCheck className="w-4 h-4 text-[#00FF88]" />
-                  <span>Package Selection & Sign-Off</span>
+                  <FileText className="w-4 h-4 text-[#00FF88]" />
+                  <span>View Proposal</span>
                 </button>
               </div>
             </div>
@@ -267,7 +274,22 @@ export const ProposalHub: React.FC = () => {
       </section>
 
       {/* 2. Main Proposal Workspace Layout — Screen within Screen Presentation Frame */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div id="proposal-workspace" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Contextual Proposal Identification Banner */}
+        <div className="mb-4 flex flex-wrap items-center justify-between gap-3 px-4 py-2.5 rounded-xl bg-[#06140C] border border-[#0F2D1C] text-xs">
+          <div className="flex items-center gap-2 text-[#90BA9C]">
+            <span className="text-[10px] font-hub-heading font-bold uppercase tracking-wider text-[#00FF88] bg-[#092013] border border-[#00FF88]/30 px-2.5 py-0.5 rounded shadow-xs">
+              TAX FRONTIER — PUBLISHING SYSTEM PROPOSAL
+            </span>
+            <span className="text-[#1A3D27] hidden sm:inline">•</span>
+            <span className="hidden sm:inline text-[#BCE0CA] text-[11px]">
+              Commissioned by CITN Umuahia Chapter & MOUAU COLMAS
+            </span>
+          </div>
+          <span className="text-[11px] text-[#7EA88E] font-mono">
+            Interactive Workspace & Evaluation Matrix
+          </span>
+        </div>
         <div className="dashboard-screen-frame rounded-3xl p-3 sm:p-5 lg:p-6 relative">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
           

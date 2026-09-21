@@ -57,6 +57,29 @@ export const Demo2PolicyPlatform: React.FC = () => {
     return matchesTopic && matchesSearch;
   });
 
+  const renderPlatformFooter = () => (
+    <footer className="bg-[#0A0F1D] text-slate-400 border-t border-slate-800 text-xs py-10 px-4 mt-12">
+      <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+        <div className="flex items-center gap-2.5">
+          <div className="w-7 h-7 rounded-lg bg-[#047857] text-white flex items-center justify-center font-bold text-xs">
+            TF
+          </div>
+          <span className="font-bold text-white text-sm">Tax Frontier Platform</span>
+          <span className="text-slate-600">|</span>
+          <span className="text-[11px] text-slate-400">CITN Umuahia Chapter & MOUAU COLMAS</span>
+        </div>
+
+        <div className="flex items-center gap-4 text-xs">
+          <button onClick={() => setCurrentSubPage('aims-scope')} className="hover:text-white">Taxonomies</button>
+          <button onClick={() => setCurrentSubPage('author-guidelines')} className="hover:text-white">Author Guide</button>
+          <button onClick={() => setCurrentSubPage('peer-review')} className="hover:text-white">Peer Review Flow</button>
+          <button onClick={() => setCurrentSubPage('events')} className="hover:text-white">Events</button>
+          <button onClick={() => setCurrentSubPage('contact')} className="hover:text-white">Secretariat</button>
+        </div>
+      </div>
+    </footer>
+  );
+
   if (currentSubPage !== 'home') {
     return (
       <div className="bg-[#F8FAFC] text-slate-900 min-h-screen font-sans">
@@ -142,6 +165,7 @@ export const Demo2PolicyPlatform: React.FC = () => {
         <main>
           <SubPages />
         </main>
+        {renderPlatformFooter()}
       </div>
     );
   }
@@ -478,25 +502,7 @@ export const Demo2PolicyPlatform: React.FC = () => {
       </section>
 
       {/* Digital Platform Modern Footer */}
-      <footer className="bg-[#0A0F1D] text-slate-400 border-t border-slate-800 text-xs py-10 px-4 mt-12">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-2.5">
-            <div className="w-7 h-7 rounded-lg bg-[#047857] text-white flex items-center justify-center font-bold text-xs">
-              TF
-            </div>
-            <span className="font-bold text-white text-sm">Tax Frontier Platform</span>
-            <span className="text-slate-600">|</span>
-            <span className="text-[11px] text-slate-400">CITN Umuahia Chapter & MOUAU COLMAS</span>
-          </div>
-
-          <div className="flex items-center gap-4 text-xs">
-            <button onClick={() => setCurrentSubPage('aims-scope')} className="hover:text-white">Taxonomies</button>
-            <button onClick={() => setCurrentSubPage('author-guidelines')} className="hover:text-white">Author Guide</button>
-            <button onClick={() => setCurrentSubPage('peer-review')} className="hover:text-white">Peer Review Flow</button>
-            <button onClick={() => setCurrentSubPage('contact')} className="hover:text-white">Secretariat</button>
-          </div>
-        </div>
-      </footer>
+      {renderPlatformFooter()}
     </div>
   );
 };

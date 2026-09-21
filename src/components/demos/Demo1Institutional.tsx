@@ -123,6 +123,109 @@ export const Demo1Institutional: React.FC = () => {
     );
   };
 
+  const renderInstitutionalFooter = () => (
+    <footer
+      className={`border-t text-xs py-12 px-4 sm:px-6 transition-colors ${
+        isDarkMode
+          ? 'bg-[#02180A] text-[#DFD5CE] border-[#143322]'
+          : 'bg-[#012509] text-[#DFD5CE] border-[#012509]'
+      }`}
+    >
+      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+        <div>
+          <div className="flex items-center gap-3 mb-2">
+            <InstitutionalSeal size="sm" />
+            <span className="font-d1-heading font-bold text-white text-base">
+              Tax Frontier
+            </span>
+          </div>
+          <p className="text-[11px] text-[#DFD5CE]/80 leading-relaxed font-d1-body">
+            Joint academic and professional journal published by CITN Umuahia Chapter and MOUAU College of Management Sciences.
+          </p>
+          <div className="mt-3">
+            <button
+              onClick={() => setIsDarkMode(!isDarkMode)}
+              className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-white/10 hover:bg-white/15 text-[#C48A36] text-[10px] font-d1-ui transition-colors"
+            >
+              {isDarkMode ? <Sun className="w-3 h-3" /> : <Moon className="w-3 h-3" />}
+              <span>{isDarkMode ? 'Switch to Light Institutional' : 'Switch to Dark Scholarly'}</span>
+            </button>
+          </div>
+        </div>
+
+        <div>
+          <h5 className="font-bold text-white uppercase text-[10px] tracking-wider mb-2 font-d1-ui">
+            Journal Governance
+          </h5>
+          <ul className="space-y-1.5 text-[#DFD5CE]/80 text-[11px] font-d1-body">
+            <li>
+              <button onClick={() => setCurrentSubPage('about')} className="hover:text-white transition-colors">
+                Institutional Mandate
+              </button>
+            </li>
+            <li>
+              <button onClick={() => setCurrentSubPage('editorial-board')} className="hover:text-white transition-colors">
+                Editorial Council
+              </button>
+            </li>
+            <li>
+              <button onClick={() => setCurrentSubPage('peer-review')} className="hover:text-white transition-colors">
+                14-Step Peer Review
+              </button>
+            </li>
+            <li>
+              <button onClick={() => setCurrentSubPage('ethics')} className="hover:text-white transition-colors">
+                COPE Ethics Statement
+              </button>
+            </li>
+          </ul>
+        </div>
+
+        <div>
+          <h5 className="font-bold text-white uppercase text-[10px] tracking-wider mb-2 font-d1-ui">
+            Author Resources
+          </h5>
+          <ul className="space-y-1.5 text-[#DFD5CE]/80 text-[11px] font-d1-body">
+            <li>
+              <button onClick={() => setCurrentSubPage('author-guidelines')} className="hover:text-white transition-colors">
+                Author Guidelines
+              </button>
+            </li>
+            <li>
+              <button onClick={() => setCurrentSubPage('fees')} className="hover:text-white transition-colors">
+                Publication Fee Schedule
+              </button>
+            </li>
+            <li>
+              <button onClick={() => setCurrentSubPage('call-for-papers')} className="hover:text-white transition-colors">
+                Maiden Call for Papers
+              </button>
+            </li>
+            <li>
+              <button onClick={() => setCurrentSubPage('submit')} className="hover:text-white transition-colors">
+                Manuscript Submission
+              </button>
+            </li>
+          </ul>
+        </div>
+
+        <div>
+          <h5 className="font-bold text-white uppercase text-[10px] tracking-wider mb-2 font-d1-ui">
+            Licensing & Indexing
+          </h5>
+          <p className="text-[11px] text-[#DFD5CE]/80 leading-relaxed font-d1-body">
+            All articles published under Creative Commons Attribution 4.0 International (CC BY 4.0). Crossref DOI allocation and Google Scholar meta tag compliance.
+          </p>
+        </div>
+      </div>
+
+      <div className="max-w-7xl mx-auto pt-6 border-t border-[#DFD5CE]/15 flex flex-col sm:flex-row items-center justify-between gap-2 text-[10px] text-[#DFD5CE]/70 font-d1-mono">
+        <span>© 2026 Tax Frontier. CITN Umuahia Chapter & MOUAU COLMAS.</span>
+        <span>OnlineFirst Proposal Architecture & Implementation Framework.</span>
+      </div>
+    </footer>
+  );
+
   // If viewing a subpage (e.g., 'about', 'aims-scope', 'submit', etc.)
   if (currentSubPage !== 'home') {
     return (
@@ -311,6 +414,7 @@ export const Demo1Institutional: React.FC = () => {
         <main>
           <SubPages />
         </main>
+        {renderInstitutionalFooter()}
       </div>
     );
   }
@@ -1104,106 +1208,7 @@ export const Demo1Institutional: React.FC = () => {
       </section>
 
       {/* 7. Structured Institutional Footer */}
-      <footer
-        className={`border-t text-xs py-12 px-4 sm:px-6 transition-colors ${
-          isDarkMode
-            ? 'bg-[#02180A] text-[#DFD5CE] border-[#143322]'
-            : 'bg-[#012509] text-[#DFD5CE] border-[#012509]'
-        }`}
-      >
-        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
-          <div>
-            <div className="flex items-center gap-3 mb-2">
-              <InstitutionalSeal size="sm" />
-              <span className="font-d1-heading font-bold text-white text-base">
-                Tax Frontier
-              </span>
-            </div>
-            <p className="text-[11px] text-[#DFD5CE]/80 leading-relaxed font-d1-body">
-              Joint academic and professional journal published by CITN Umuahia Chapter and MOUAU College of Management Sciences.
-            </p>
-            <div className="mt-3">
-              <button
-                onClick={() => setIsDarkMode(!isDarkMode)}
-                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-white/10 hover:bg-white/15 text-[#C48A36] text-[10px] font-d1-ui transition-colors"
-              >
-                {isDarkMode ? <Sun className="w-3 h-3" /> : <Moon className="w-3 h-3" />}
-                <span>{isDarkMode ? 'Switch to Light Institutional' : 'Switch to Dark Scholarly'}</span>
-              </button>
-            </div>
-          </div>
-
-          <div>
-            <h5 className="font-bold text-white uppercase text-[10px] tracking-wider mb-2 font-d1-ui">
-              Journal Governance
-            </h5>
-            <ul className="space-y-1.5 text-[#DFD5CE]/80 text-[11px] font-d1-body">
-              <li>
-                <button onClick={() => setCurrentSubPage('about')} className="hover:text-white transition-colors">
-                  Institutional Mandate
-                </button>
-              </li>
-              <li>
-                <button onClick={() => setCurrentSubPage('editorial-board')} className="hover:text-white transition-colors">
-                  Editorial Council
-                </button>
-              </li>
-              <li>
-                <button onClick={() => setCurrentSubPage('peer-review')} className="hover:text-white transition-colors">
-                  14-Step Peer Review
-                </button>
-              </li>
-              <li>
-                <button onClick={() => setCurrentSubPage('ethics')} className="hover:text-white transition-colors">
-                  COPE Ethics Statement
-                </button>
-              </li>
-            </ul>
-          </div>
-
-          <div>
-            <h5 className="font-bold text-white uppercase text-[10px] tracking-wider mb-2 font-d1-ui">
-              Author Resources
-            </h5>
-            <ul className="space-y-1.5 text-[#DFD5CE]/80 text-[11px] font-d1-body">
-              <li>
-                <button onClick={() => setCurrentSubPage('author-guidelines')} className="hover:text-white transition-colors">
-                  Author Guidelines
-                </button>
-              </li>
-              <li>
-                <button onClick={() => setCurrentSubPage('fees')} className="hover:text-white transition-colors">
-                  Publication Fee Schedule
-                </button>
-              </li>
-              <li>
-                <button onClick={() => setCurrentSubPage('call-for-papers')} className="hover:text-white transition-colors">
-                  Maiden Call for Papers
-                </button>
-              </li>
-              <li>
-                <button onClick={() => setCurrentSubPage('submit')} className="hover:text-white transition-colors">
-                  Manuscript Submission
-                </button>
-              </li>
-            </ul>
-          </div>
-
-          <div>
-            <h5 className="font-bold text-white uppercase text-[10px] tracking-wider mb-2 font-d1-ui">
-              Licensing & Indexing
-            </h5>
-            <p className="text-[11px] text-[#DFD5CE]/80 leading-relaxed font-d1-body">
-              All articles published under Creative Commons Attribution 4.0 International (CC BY 4.0). Crossref DOI allocation and Google Scholar meta tag compliance.
-            </p>
-          </div>
-        </div>
-
-        <div className="max-w-7xl mx-auto pt-6 border-t border-[#DFD5CE]/15 flex flex-col sm:flex-row items-center justify-between gap-2 text-[10px] text-[#DFD5CE]/70 font-d1-mono">
-          <span>© 2026 Tax Frontier. CITN Umuahia Chapter & MOUAU COLMAS.</span>
-          <span>OnlineFirst Proposal Architecture & Implementation Framework.</span>
-        </div>
-      </footer>
+      {renderInstitutionalFooter()}
     </div>
   );
 };

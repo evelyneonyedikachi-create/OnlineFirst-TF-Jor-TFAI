@@ -279,6 +279,61 @@ export const Demo3AfricanDiscovery: React.FC = () => {
     </>
   );
 
+  const renderDiscoveryFooter = () => (
+    <footer className="bg-[#070E1A] text-[#A6B7CC] border-t border-[#152336] text-xs py-12 px-4 sm:px-6">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+        <div>
+          <div className="flex items-center gap-2 mb-2">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#C5A059] to-[#8C6D32] text-[#070E1A] flex items-center justify-center font-bold text-sm">
+              TF
+            </div>
+            <span className="font-newsreader font-semibold text-[#F8F6F0] text-base">Tax Frontier Discovery</span>
+          </div>
+          <p className="text-[11px] text-[#C5A059] font-catalog-mono">
+            Scientific Repository & Citation Index
+          </p>
+          <p className="text-[11px] text-[#788C9E] mt-2 leading-relaxed">
+            Joint scientific journal platform of CITN Umuahia Chapter & MOUAU College of Management Sciences.
+          </p>
+        </div>
+
+        <div>
+          <h5 className="font-bold text-[#C5A059] uppercase text-[10px] tracking-wider mb-2 font-catalog-mono">Repository Indexing</h5>
+          <ul className="space-y-1 text-[#8CA0B8] text-[11px]">
+            <li>Crossref Registered DOIs</li>
+            <li>Google Scholar Citation Indices</li>
+            <li>ROAD Open Access Portal</li>
+            <li>CC BY 4.0 Open Licensing</li>
+          </ul>
+        </div>
+
+        <div>
+          <h5 className="font-bold text-[#C5A059] uppercase text-[10px] tracking-wider mb-2 font-catalog-mono">Scientific Rigor</h5>
+          <ul className="space-y-1 text-[#8CA0B8] text-[11px]">
+            <li>Double-Blind Peer Review (2 Reviewers)</li>
+            <li>Turnitin Plagiarism Verification</li>
+            <li>COPE Ethics & Transparency</li>
+            <li>Replication Datasets Archive</li>
+          </ul>
+        </div>
+
+        <div>
+          <h5 className="font-bold text-[#C5A059] uppercase text-[10px] tracking-wider mb-2 font-catalog-mono">Secretariat</h5>
+          <p className="text-[11px] text-[#F8F6F0]">
+            COLMAS, MOUAU, Umudike, Nigeria
+          </p>
+          <p className="font-catalog-mono text-[11px] text-[#C5A059] mt-1">
+            {config.editorialEmail}
+          </p>
+        </div>
+      </div>
+
+      <div className="max-w-7xl mx-auto pt-6 border-t border-[#152336] text-center text-[10px] text-[#586A7C] font-catalog-mono">
+        © 2026 Tax Frontier Discovery Platform. OnlineFirst Scientific Academic Architecture.
+      </div>
+    </footer>
+  );
+
   // Subpage rendering with rich scholarly library catalog masthead
   if (currentSubPage !== 'home') {
     return (
@@ -287,6 +342,7 @@ export const Demo3AfricanDiscovery: React.FC = () => {
         <main>
           <SubPages />
         </main>
+        {renderDiscoveryFooter()}
       </div>
     );
   }
@@ -850,58 +906,7 @@ export const Demo3AfricanDiscovery: React.FC = () => {
       )}
 
       {/* 8. Scientific Journal Footer */}
-      <footer className="bg-[#070E1A] text-[#A6B7CC] border-t border-[#152336] text-xs py-12 px-4 sm:px-6">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
-          <div>
-            <div className="flex items-center gap-2 mb-2">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#C5A059] to-[#8C6D32] text-[#070E1A] flex items-center justify-center font-bold text-sm">
-                TF
-              </div>
-              <span className="font-newsreader font-semibold text-[#F8F6F0] text-base">Tax Frontier Discovery</span>
-            </div>
-            <p className="text-[11px] text-[#C5A059] font-catalog-mono">
-              Scientific Repository & Citation Index
-            </p>
-            <p className="text-[11px] text-[#788C9E] mt-2 leading-relaxed">
-              Joint scientific journal platform of CITN Umuahia Chapter & MOUAU College of Management Sciences.
-            </p>
-          </div>
-
-          <div>
-            <h5 className="font-bold text-[#C5A059] uppercase text-[10px] tracking-wider mb-2 font-catalog-mono">Repository Indexing</h5>
-            <ul className="space-y-1 text-[#8CA0B8] text-[11px]">
-              <li>Crossref Registered DOIs</li>
-              <li>Google Scholar Citation Indices</li>
-              <li>ROAD Open Access Portal</li>
-              <li>CC BY 4.0 Open Licensing</li>
-            </ul>
-          </div>
-
-          <div>
-            <h5 className="font-bold text-[#C5A059] uppercase text-[10px] tracking-wider mb-2 font-catalog-mono">Scientific Rigor</h5>
-            <ul className="space-y-1 text-[#8CA0B8] text-[11px]">
-              <li>Double-Blind Peer Review (2 Reviewers)</li>
-              <li>Turnitin Plagiarism Verification</li>
-              <li>COPE Ethics & Transparency</li>
-              <li>Replication Datasets Archive</li>
-            </ul>
-          </div>
-
-          <div>
-            <h5 className="font-bold text-[#C5A059] uppercase text-[10px] tracking-wider mb-2 font-catalog-mono">Secretariat</h5>
-            <p className="text-[11px] text-[#F8F6F0]">
-              COLMAS, MOUAU, Umudike, Nigeria
-            </p>
-            <p className="font-catalog-mono text-[11px] text-[#C5A059] mt-1">
-              {config.editorialEmail}
-            </p>
-          </div>
-        </div>
-
-        <div className="max-w-7xl mx-auto pt-6 border-t border-[#152336] text-center text-[10px] text-[#586A7C] font-catalog-mono">
-          © 2026 Tax Frontier Discovery Platform. OnlineFirst Scientific Academic Architecture.
-        </div>
-      </footer>
+      {renderDiscoveryFooter()}
     </div>
   );
 };

@@ -88,7 +88,8 @@ export const AdminAnnouncementsManager: React.FC = () => {
     e.preventDefault();
 
     if (!formData.title.trim() || !formData.shortMessage.trim()) {
-      alert('Please provide a title and short message for the announcement.');
+      setNotification('Please provide both a title and short message for the announcement.');
+      setTimeout(() => setNotification(null), 4000);
       return;
     }
 

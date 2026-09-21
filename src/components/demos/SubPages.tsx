@@ -47,6 +47,7 @@ export const SubPages: React.FC = () => {
     selectedArticle,
     setSelectedArticle,
     editorialMembers,
+    setNotification,
   } = useJournalConfig();
 
   const [searchQuery, setSearchQuery] = useState('');
@@ -297,7 +298,10 @@ export const SubPages: React.FC = () => {
                 </button>
 
                 <button
-                  onClick={() => alert('Download Maiden Edition Call for Papers PDF announcement flyer (Digital Simulation).')}
+                  onClick={() => {
+                    setNotification('Maiden Edition Call for Papers announcement flyer downloaded (Digital Simulation).');
+                    setTimeout(() => setNotification(null), 4000);
+                  }}
                   className="px-4 py-3 text-slate-400 hover:text-white text-xs flex items-center gap-1.5 transition-colors"
                 >
                   <FileText className="w-4 h-4" />
@@ -648,7 +652,10 @@ export const SubPages: React.FC = () => {
             <div className="mt-8 pt-6 border-t border-slate-200 flex flex-wrap items-center justify-between gap-4">
               <div className="flex items-center gap-3">
                 <button
-                  onClick={() => alert('Galley PDF viewer (Download demo simulation). In production, this serves the complete formatted galley PDF with Crossref metadata.')}
+                  onClick={() => {
+                    setNotification(`Downloading galley PDF for: "${selectedArticle.title}" with Crossref metadata (Digital Simulation).`);
+                    setTimeout(() => setNotification(null), 4000);
+                  }}
                   className="px-5 py-2.5 bg-emerald-800 hover:bg-emerald-700 text-white font-semibold rounded-xl transition-all flex items-center gap-2 text-sm shadow-sm"
                 >
                   <Download className="w-4 h-4" />
@@ -740,7 +747,8 @@ export const SubPages: React.FC = () => {
                   rel="noreferrer"
                   onClick={(e) => {
                     e.preventDefault();
-                    alert(`Redirecting to OJS instance at: https://${config.journalDomain}/ojs/submission (External OJS Mode Simulation). In production, this seamlessly launches the institutional OJS portal.`);
+                    setNotification(`Launching External OJS Submission Gateway at https://${config.journalDomain}/ojs/submission (Simulated Link).`);
+                    setTimeout(() => setNotification(null), 4000);
                   }}
                   className="px-6 py-3 bg-emerald-800 hover:bg-emerald-700 text-white font-bold rounded-xl transition-all flex items-center gap-2 text-sm shadow-md"
                 >
@@ -1226,6 +1234,287 @@ export const SubPages: React.FC = () => {
                 </div>
               ))}
             </div>
+          </div>
+        </div>
+      );
+
+    case 'events':
+      return (
+        <div className="max-w-5xl mx-auto px-4 py-12">
+          <div className="mb-8">
+            <span className="text-xs font-bold uppercase tracking-wider text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200">
+              Academic & Professional Convenings
+            </span>
+            <h1 className="text-3xl sm:text-4xl font-d1-heading font-bold text-slate-900 mt-3 tracking-tight">
+              Symposia, Conferences & Technical Workshops
+            </h1>
+            <p className="text-base text-slate-600 mt-2">
+              Jointly sponsored by CITN Umuahia Chapter and MOUAU COLMAS to foster empirical tax scholarship, professional capacity building, and policy dialog.
+            </p>
+          </div>
+
+          <div className="space-y-6 mb-12">
+            {/* Event 1 */}
+            <div className="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-sm hover:border-emerald-500 transition-all">
+              <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-4 mb-4">
+                <div className="flex items-center gap-2">
+                  <span className="bg-amber-100 text-amber-900 text-xs font-bold uppercase px-2.5 py-0.5 rounded border border-amber-300">
+                    Annual Hybrid Symposium
+                  </span>
+                  <span className="text-xs text-slate-500">Vol. 1 Special Issue Track</span>
+                </div>
+                <div className="flex items-center gap-1.5 text-xs font-semibold text-emerald-800 bg-emerald-50 px-3 py-1 rounded-lg border border-emerald-200">
+                  <Calendar className="w-3.5 h-3.5" />
+                  <span>November 24–25, 2026</span>
+                </div>
+              </div>
+
+              <h2 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
+                National Tax Policy & Sub-National Revenue Mobilization Symposium
+              </h2>
+              <p className="text-sm text-slate-600 mt-2 leading-relaxed">
+                Theme: <em>"Navigating the New Era of Fiscal Federalism: Digital Platforms, Informal Sector Compliance, and Sub-National Fiscal Autonomy in Nigeria."</em>
+              </p>
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-5 pt-4 border-t border-slate-100 text-xs text-slate-600">
+                <div>
+                  <strong className="block text-slate-900">Venue & Mode:</strong>
+                  <span>COLMAS Conference Auditorium, MOUAU Umudike & Zoom Global Hybrid</span>
+                </div>
+                <div>
+                  <strong className="block text-slate-900">Accreditation:</strong>
+                  <span>CITN Mandatory Professional Training (12 CPD Credit Units)</span>
+                </div>
+                <div>
+                  <strong className="block text-slate-900">Publication Pipeline:</strong>
+                  <span className="text-emerald-700 font-semibold">Accepted papers fast-tracked for Tax Frontier Vol. 1, Issue 2</span>
+                </div>
+              </div>
+
+              <div className="mt-6 flex flex-wrap items-center gap-3">
+                <button
+                  onClick={() => setCurrentSubPage('submit')}
+                  className="px-5 py-2.5 bg-emerald-800 hover:bg-emerald-700 text-white font-bold rounded-xl text-xs flex items-center gap-2 shadow-sm transition-all"
+                >
+                  <Send className="w-3.5 h-3.5" />
+                  Submit Symposium Abstract
+                </button>
+                <button
+                  onClick={() => {
+                    setNotification('Symposium delegate registration form opened (Digital Simulation).');
+                    setTimeout(() => setNotification(null), 4000);
+                  }}
+                  className="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-800 font-semibold rounded-xl text-xs transition-colors"
+                >
+                  Register as Delegate
+                </button>
+              </div>
+            </div>
+
+            {/* Event 2 */}
+            <div className="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-sm hover:border-emerald-500 transition-all">
+              <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-4 mb-4">
+                <div className="flex items-center gap-2">
+                  <span className="bg-purple-100 text-purple-900 text-xs font-bold uppercase px-2.5 py-0.5 rounded border border-purple-300">
+                    Faculty & Practitioner Workshop
+                  </span>
+                  <span className="text-xs text-slate-500">Peer Referee Masterclass</span>
+                </div>
+                <div className="flex items-center gap-1.5 text-xs font-semibold text-purple-900 bg-purple-50 px-3 py-1 rounded-lg border border-purple-200">
+                  <Calendar className="w-3.5 h-3.5" />
+                  <span>October 14, 2026</span>
+                </div>
+              </div>
+
+              <h2 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
+                Joint Editorial & Reviewer Workshop: Enhancing African Scholarly Publishing Rigor
+              </h2>
+              <p className="text-sm text-slate-600 mt-2 leading-relaxed">
+                A hands-on methodology training for associate editors, reviewers, and doctoral researchers focusing on COPE double-blind evaluation, Turnitin similarity analytics, statutory legal referencing, and Open Access compliance.
+              </p>
+
+              <div className="mt-5 flex flex-wrap items-center gap-3">
+                <button
+                  onClick={() => setCurrentSubPage('contact')}
+                  className="px-5 py-2.5 bg-slate-900 hover:bg-slate-800 text-white font-semibold rounded-xl text-xs flex items-center gap-2 transition-all"
+                >
+                  <Users className="w-3.5 h-3.5 text-emerald-400" />
+                  Apply to Join Reviewer Panel
+                </button>
+                <button
+                  onClick={() => setCurrentSubPage('peer-review')}
+                  className="px-4 py-2.5 text-slate-600 hover:text-slate-900 text-xs font-semibold"
+                >
+                  Review 14-Step Peer Review Protocol →
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+
+    case 'search':
+      return (
+        <div className="max-w-6xl mx-auto px-4 py-12">
+          <div className="mb-8">
+            <span className="text-xs font-bold uppercase tracking-wider text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200">
+              Scholarly Discovery Engine
+            </span>
+            <h1 className="text-3xl sm:text-4xl font-d1-heading font-bold text-slate-900 mt-3 tracking-tight">
+              Search Tax Frontier Publications & Archive
+            </h1>
+            <p className="text-base text-slate-600 mt-2">
+              Browse peer-reviewed empirical research, statutory policy analyses, and case commentaries.
+            </p>
+          </div>
+
+          {/* Search bar & filters */}
+          <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm mb-8 space-y-4">
+            <div className="relative">
+              <Search className="w-5 h-5 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2" />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search by keywords, title, author name, or abstract text..."
+                className="w-full pl-12 pr-10 py-3.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 focus:bg-white focus:outline-hidden focus:ring-2 focus:ring-emerald-600 focus:border-transparent transition-all"
+              />
+              {searchQuery && (
+                <button
+                  onClick={() => setSearchQuery('')}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-semibold text-slate-400 hover:text-slate-700 bg-slate-200/80 px-2 py-1 rounded-md"
+                >
+                  Clear
+                </button>
+              )}
+            </div>
+
+            <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-slate-100">
+              <span className="text-xs font-bold text-slate-500 uppercase tracking-wider mr-1">
+                Filter Area:
+              </span>
+              <button
+                onClick={() => setSelectedTaxonomy('all')}
+                className={`text-xs px-3 py-1 rounded-full font-medium transition-colors ${
+                  selectedTaxonomy === 'all'
+                    ? 'bg-emerald-800 text-white font-bold'
+                    : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+                }`}
+              >
+                All Areas ({articles.length})
+              </button>
+              {subjectTaxonomies.slice(0, 7).map((tax) => (
+                <button
+                  key={tax.id}
+                  onClick={() => setSelectedTaxonomy(tax.name)}
+                  className={`text-xs px-3 py-1 rounded-full font-medium transition-colors ${
+                    selectedTaxonomy === tax.name
+                      ? 'bg-emerald-800 text-white font-bold'
+                      : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+                  }`}
+                >
+                  {tax.name}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Results list */}
+          <div className="space-y-4">
+            <div className="text-xs font-semibold text-slate-500 flex items-center justify-between px-1">
+              <span>Showing {filteredArticles.length} scholarly treatise{filteredArticles.length !== 1 ? 's' : ''}</span>
+              {selectedTaxonomy !== 'all' && (
+                <span className="text-emerald-700">Area: {selectedTaxonomy}</span>
+              )}
+            </div>
+
+            {filteredArticles.length === 0 ? (
+              <div className="bg-white p-12 text-center rounded-2xl border border-dashed border-slate-300">
+                <BookOpen className="w-10 h-10 text-slate-400 mx-auto mb-3" />
+                <h3 className="font-bold text-slate-800 text-base">No matching articles found</h3>
+                <p className="text-xs text-slate-500 mt-1 max-w-sm mx-auto">
+                  Try adjusting your search keywords or resetting the subject area taxonomy filter.
+                </p>
+                <button
+                  onClick={() => {
+                    setSearchQuery('');
+                    setSelectedTaxonomy('all');
+                  }}
+                  className="mt-4 px-4 py-2 bg-emerald-800 text-white rounded-lg text-xs font-semibold hover:bg-emerald-700"
+                >
+                  Reset Filters
+                </button>
+              </div>
+            ) : (
+              filteredArticles.map((art) => (
+                <div
+                  key={art.id}
+                  className="bg-white p-6 rounded-2xl border border-slate-200 hover:border-emerald-500 shadow-xs hover:shadow-md transition-all group"
+                >
+                  <div className="flex flex-wrap items-center gap-2 mb-2">
+                    <span className="text-[10px] font-bold uppercase tracking-wider bg-emerald-50 text-emerald-800 px-2 py-0.5 rounded border border-emerald-200">
+                      {art.type}
+                    </span>
+                    <span className="text-xs text-slate-500 font-mono">
+                      Vol. {art.volume}, Issue {art.issue} ({art.publicationDate})
+                    </span>
+                    <span className="text-xs text-emerald-700 font-mono">
+                      DOI: {art.doi}
+                    </span>
+                  </div>
+
+                  <h3
+                    onClick={() => {
+                      setSelectedArticle(art);
+                      setCurrentSubPage('article-detail');
+                    }}
+                    className="text-lg font-bold text-slate-900 group-hover:text-emerald-800 cursor-pointer transition-colors"
+                  >
+                    {art.title}
+                  </h3>
+
+                  <p className="text-xs text-slate-600 mt-1 font-medium">
+                    {art.authors.map((a) => a.name).join(', ')} —{' '}
+                    <span className="text-slate-400">{art.authors[0]?.affiliation}</span>
+                  </p>
+
+                  <p className="text-xs text-slate-600 mt-3 line-clamp-2 leading-relaxed">
+                    {art.abstract}
+                  </p>
+
+                  <div className="mt-4 pt-3 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3 text-xs">
+                    <div className="flex flex-wrap gap-1.5">
+                      {art.keywords.slice(0, 3).map((kw, i) => (
+                        <span key={i} className="text-[10px] bg-slate-100 text-slate-700 px-2 py-0.5 rounded">
+                          {kw}
+                        </span>
+                      ))}
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={() => handleCopyCitation(art)}
+                        className="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-semibold transition-colors flex items-center gap-1"
+                      >
+                        <Quote className="w-3.5 h-3.5" />
+                        {copiedCitation === art.id ? 'Copied' : 'Cite'}
+                      </button>
+
+                      <button
+                        onClick={() => {
+                          setSelectedArticle(art);
+                          setCurrentSubPage('article-detail');
+                        }}
+                        className="px-4 py-1.5 bg-emerald-800 hover:bg-emerald-700 text-white rounded-lg text-xs font-semibold transition-all flex items-center gap-1"
+                      >
+                        <span>View Article</span>
+                        <ChevronRight className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))
+            )}
           </div>
         </div>
       );
