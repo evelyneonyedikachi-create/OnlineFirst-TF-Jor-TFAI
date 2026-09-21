@@ -113,7 +113,7 @@ export const JournalConfigProvider: React.FC<{ children: React.ReactNode }> = ({
   const [currentSubPage, setCurrentSubPage] = useState<JournalSubPage>('home');
   const [selectedArticle, setSelectedArticle] = useState<JournalArticle | null>(sampleArticles[0]);
   const [grayscaleMode, setGrayscaleMode] = useState<boolean>(false);
-  const [activeHubSection, setActiveHubSection] = useState<string>('01_why_platform');
+  const [activeHubSection, setActiveHubSection] = useState<string>('executive-summary');
   const [notification, setNotification] = useState<string | null>(null);
 
   // Stored state with fallbacks

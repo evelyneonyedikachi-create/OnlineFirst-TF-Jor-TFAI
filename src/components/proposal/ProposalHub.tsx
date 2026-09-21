@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useJournalConfig } from '../../context/JournalConfigContext';
 import {
   proposalTiers,
@@ -278,8 +278,14 @@ ${notes ? notes : 'No additional committee directives specified.'}
     { id: 'acceptance-workflow', index: '11', title: 'Package Acceptance', icon: FileCheck, desc: 'Formal client sign-off workflow' },
   ];
 
-  const currentSectionIdx = sections.findIndex((s) => s.id === activeHubSection);
+  const currentSectionIdx = Math.max(0, sections.findIndex((s) => s.id === activeHubSection));
   const currentSection = sections[currentSectionIdx] || sections[0];
+
+  useEffect(() => {
+    if (!sections.some((s) => s.id === activeHubSection)) {
+      setActiveHubSection('executive-summary');
+    }
+  }, [activeHubSection, setActiveHubSection]);
 
   const goToPrev = () => {
     if (currentSectionIdx > 0) {
