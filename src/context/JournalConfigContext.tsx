@@ -66,9 +66,17 @@ interface JournalContextType {
     signatoryName: string;
     signatoryRole: string;
     signatoryEmail: string;
+    signatoryPhone?: string;
+    signatoryInstitution?: string;
+    totalFee?: number;
+    depositAmount?: number;
+    balanceAmount?: number;
     status: 'pending' | 'accepted';
     acceptedAt?: string;
     notes?: string;
+    notificationRecipient?: string;
+    dispatchStatus?: string;
+    decisionDeadline?: string;
   };
   setCommercialAcceptance: React.Dispatch<React.SetStateAction<{
     selectedTier: string;
@@ -76,9 +84,17 @@ interface JournalContextType {
     signatoryName: string;
     signatoryRole: string;
     signatoryEmail: string;
+    signatoryPhone?: string;
+    signatoryInstitution?: string;
+    totalFee?: number;
+    depositAmount?: number;
+    balanceAmount?: number;
     status: 'pending' | 'accepted';
     acceptedAt?: string;
     notes?: string;
+    notificationRecipient?: string;
+    dispatchStatus?: string;
+    decisionDeadline?: string;
   }>>;
   
   // Quick navigation helpers
@@ -132,9 +148,17 @@ export const JournalConfigProvider: React.FC<{ children: React.ReactNode }> = ({
     signatoryName: string;
     signatoryRole: string;
     signatoryEmail: string;
+    signatoryPhone?: string;
+    signatoryInstitution?: string;
+    totalFee?: number;
+    depositAmount?: number;
+    balanceAmount?: number;
     status: 'pending' | 'accepted';
     acceptedAt?: string;
     notes?: string;
+    notificationRecipient?: string;
+    dispatchStatus?: string;
+    decisionDeadline?: string;
   }>(() => {
     const saved = localStorage.getItem('taxfrontier_comm_acceptance');
     return saved
@@ -145,6 +169,10 @@ export const JournalConfigProvider: React.FC<{ children: React.ReactNode }> = ({
           signatoryName: '',
           signatoryRole: 'Chairman, Journal Editorial Board',
           signatoryEmail: initialJournalConfig.contractRecipientEmail,
+          signatoryPhone: '',
+          signatoryInstitution: 'Joint CITN-MOUAU Project Committee',
+          decisionDeadline: 'October 2, 2026',
+          notificationRecipient: 'onlinefirst2026@gmail.com',
           status: 'pending',
         };
   });

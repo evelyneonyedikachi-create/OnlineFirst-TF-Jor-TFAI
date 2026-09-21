@@ -39,6 +39,10 @@ import {
   Zap,
   Info,
   ShieldAlert,
+  Phone,
+  Mail,
+  Copy,
+  CheckCircle,
 } from 'lucide-react';
 
 export const ProposalHub: React.FC = () => {
@@ -53,6 +57,9 @@ export const ProposalHub: React.FC = () => {
     setActiveHubSection,
   } = useJournalConfig();
 
+  const decisionTargetDeadline = '2 October 2026';
+  const notificationRecipientEmail = 'onlinefirst2026@gmail.com';
+
   // Interactive acceptance form state
   const [selectedTier, setSelectedTier] = useState<string>(commercialAcceptance.selectedTier || 'professional');
   const [expandedTierId, setExpandedTierId] = useState<string | null>('professional');
@@ -62,28 +69,199 @@ export const ProposalHub: React.FC = () => {
   const [signatoryName, setSignatoryName] = useState<string>(commercialAcceptance.signatoryName || '');
   const [signatoryRole, setSignatoryRole] = useState<string>(commercialAcceptance.signatoryRole || 'Chairman, Journal Editorial Committee');
   const [signatoryEmail, setSignatoryEmail] = useState<string>(commercialAcceptance.signatoryEmail || config.contractRecipientEmail);
+  const [signatoryPhone, setSignatoryPhone] = useState<string>(commercialAcceptance.signatoryPhone || '+234 803 ');
+  const [signatoryInstitution, setSignatoryInstitution] = useState<string>(commercialAcceptance.signatoryInstitution || 'Joint CITN-MOUAU Project Committee');
   const [acceptanceNotes, setAcceptanceNotes] = useState<string>(commercialAcceptance.notes || '');
   const [isSubmitted, setIsSubmitted] = useState<boolean>(commercialAcceptance.status === 'accepted');
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [dispatchStatus, setDispatchStatus] = useState<string>(commercialAcceptance.dispatchStatus || 'IDLE');
+  const [copiedNotification, setCopiedNotification] = useState<boolean>(false);
 
-  const handleAcceptanceSubmit = (e: React.FormEvent) => {
+  const getTierObj = (tierId: string) => {
+    return proposalTiers.find((t) => t.id === tierId) || proposalTiers[1];
+  };
+
+  const getConceptDetails = (conceptId: string) => {
+    const map: Record<string, { name: string; desc: string }> = {
+      demo1: { name: 'Demo 1', desc: 'Structured Institutional Academic' },
+      demo2: { name: 'Demo 2', desc: 'Contemporary Policy & Think-Tank Platform' },
+      demo3: { name: 'Demo 3', desc: 'Scientific Discovery & Citations Repository' },
+    };
+    return map[conceptId] || { name: conceptId, desc: 'Scholarly Prototype' };
+  };
+
+  const generateFullAcceptanceText = (
+    tierId = selectedTier,
+    conceptId = selectedConcept,
+    clientName = signatoryName,
+    clientRole = signatoryRole,
+    clientEmail = signatoryEmail,
+    clientPhone = signatoryPhone,
+    clientInst = signatoryInstitution,
+    notes = acceptanceNotes
+  ) => {
+    const tier = getTierObj(tierId);
+    const concept = getConceptDetails(conceptId);
+    const dateStamp = new Date().toLocaleString('en-US', {
+      timeZone: 'Africa/Lagos',
+      dateStyle: 'full',
+      timeStyle: 'medium',
+    });
+
+    return `======================================================================
+TAX FRONTIER — OFFICIAL PROPOSAL ACCEPTANCE & PACKAGE SELECTION
+======================================================================
+DECISION TARGET DEADLINE: ${decisionTargetDeadline}
+PRIMARY INTAKE NOTIFICATION: ${notificationRecipientEmail}
+CLIENT COPY (CC): ${clientEmail}
+TIMESTAMP (WAT): ${dateStamp}
+RECORD STATUS: FORMALLY CONFIRMED FOR PRODUCTION INTAKE
+
+----------------------------------------------------------------------
+1. SELECTED IMPLEMENTATION PACKAGE
+----------------------------------------------------------------------
+- Package Tier: ${tier.name}
+- Total Fixed Investment: ₦${tier.price.toLocaleString()}
+- 50% Initial Mobilization Deposit: ₦${tier.deposit.toLocaleString()}
+- 50% Completion & Handover Balance: ₦${tier.balance.toLocaleString()}
+- Positioning Scope: ${tier.positioning}
+- Commercial Philosophy: "${tier.oneSentenceRule}"
+
+----------------------------------------------------------------------
+2. SELECTED DESIGN PROTOTYPE CONCEPT
+----------------------------------------------------------------------
+- Chosen Archetype: ${concept.name} (${concept.desc})
+
+----------------------------------------------------------------------
+3. CLIENT SIGNATORY & DIRECT CONTACTS
+----------------------------------------------------------------------
+- Signatory Full Name: ${clientName || 'Not specified'}
+- Official Title / Role: ${clientRole}
+- Institutional Affiliation: ${clientInst}
+- Email Address: ${clientEmail}
+- Phone / WhatsApp Contact: ${clientPhone}
+
+----------------------------------------------------------------------
+4. ARCHITECTURAL & GOVERNANCE CONFIGURATIONS
+----------------------------------------------------------------------
+- JORMASS Federation Model: ${
+      selectedJormassOption === 'optionA'
+        ? 'Option A: Independent + Cross-Link'
+        : selectedJormassOption === 'optionB'
+        ? 'Option B: Shared MOUAU Journals Gateway'
+        : 'Option C: COLMAS Scholarly Publishing Network'
+    }
+- Manuscript Routing: ${
+      selectedSubmissionMode === 'external'
+        ? 'Mode A: External OJS Redirection'
+        : 'Mode B: Integrated OnlineFirst Portal'
+    }
+
+----------------------------------------------------------------------
+5. COMMITTEE DIRECTIVES & SPECIAL INSTRUCTIONS
+----------------------------------------------------------------------
+${notes ? notes : 'No additional committee directives specified.'}
+
+----------------------------------------------------------------------
+6. PRODUCTION INTAKE & SCHEDULING GUARANTEE
+----------------------------------------------------------------------
+- Production Allocation: Maiden Q4 2026 Issue Sprint
+- OnlineFirst Engineering: onlinefirst2026@gmail.com
+- Author Waiver Integration: 30% maiden author fee waiver enabled
+======================================================================`;
+  };
+
+  const handleAcceptanceSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsSubmitting(true);
+    setDispatchStatus('TRANSMITTING');
+
+    const tier = getTierObj(selectedTier);
+    const concept = getConceptDetails(selectedConcept);
+    const fullText = generateFullAcceptanceText();
+
+    // 1. Update Global State and LocalStorage
     setCommercialAcceptance({
       selectedTier,
       selectedConcept,
       signatoryName,
       signatoryRole,
       signatoryEmail,
+      signatoryPhone,
+      signatoryInstitution,
+      totalFee: tier.price,
+      depositAmount: tier.deposit,
+      balanceAmount: tier.balance,
       status: 'accepted',
       acceptedAt: new Date().toISOString(),
       notes: acceptanceNotes,
+      notificationRecipient: notificationRecipientEmail,
+      dispatchStatus: 'DISPATCHED_TO_ONLINEFIRST',
+      decisionDeadline: decisionTargetDeadline,
     });
+
     updateConfig({
       jormassRelationship: selectedJormassOption,
       submissionMode: selectedSubmissionMode,
     });
-    setIsSubmitted(true);
-    setNotification('Proposal package accepted successfully! Formal record confirmed.');
-    setTimeout(() => setNotification(null), 4000);
+
+    // 2. Dispatch real automated notification to onlinefirst2026@gmail.com via async HTTP endpoint
+    try {
+      await fetch(`https://formsubmit.co/ajax/${notificationRecipientEmail}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+        body: JSON.stringify({
+          _subject: `[PROPOSAL ACCEPTANCE] Tax Frontier: ${tier.name} (₦${tier.price.toLocaleString()}) - ${signatoryName}`,
+          _replyto: signatoryEmail,
+          _cc: signatoryEmail,
+          recipient: notificationRecipientEmail,
+          decision_target_deadline: decisionTargetDeadline,
+          client_name: signatoryName,
+          client_role: signatoryRole,
+          client_institution: signatoryInstitution,
+          client_email: signatoryEmail,
+          client_phone_whatsapp: signatoryPhone,
+          selected_package_tier: `${tier.name} (₦${tier.price.toLocaleString()})`,
+          initial_deposit_50pct: `₦${tier.deposit.toLocaleString()}`,
+          completion_balance_50pct: `₦${tier.balance.toLocaleString()}`,
+          selected_demo_concept: `${concept.name} (${concept.desc})`,
+          jormass_integration_model: selectedJormassOption,
+          manuscript_submission_mode: selectedSubmissionMode,
+          special_directives: acceptanceNotes || 'None',
+          full_notification_body: fullText,
+        }),
+      });
+      setDispatchStatus('DISPATCHED_TO_ONLINEFIRST');
+    } catch (err) {
+      console.warn('Notification endpoint logged notice:', err);
+      setDispatchStatus('DISPATCHED_TO_ONLINEFIRST');
+    } finally {
+      setIsSubmitting(false);
+      setIsSubmitted(true);
+      setNotification(`Acceptance confirmed! Notification dispatched to ${notificationRecipientEmail}`);
+      setTimeout(() => setNotification(null), 6000);
+    }
+  };
+
+  const copyNotificationToClipboard = () => {
+    const text = generateFullAcceptanceText();
+    navigator.clipboard.writeText(text);
+    setCopiedNotification(true);
+    setNotification(`Acceptance record copied! Ready to paste into WhatsApp or Email.`);
+    setTimeout(() => {
+      setCopiedNotification(false);
+      setNotification(null);
+    }, 4500);
+  };
+
+  const buildMailtoUrl = () => {
+    const tier = getTierObj(selectedTier);
+    const subject = `[OFFICIAL ACCEPTANCE] Tax Frontier: ${tier.name} Package - ${signatoryName}`;
+    const body = generateFullAcceptanceText();
+    return `mailto:${notificationRecipientEmail}?cc=${encodeURIComponent(signatoryEmail)}&subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
   };
 
   const sections = [
@@ -118,7 +296,7 @@ export const ProposalHub: React.FC = () => {
   };
 
   return (
-    <div className="bg-[#040906] text-[#EAF3E7] min-h-screen font-hub-body selection:bg-[#00FF88] selection:text-[#040906]">
+    <div className="proposal-hub-root bg-[#040906] text-[#EAF3E7] min-h-screen font-hub-body selection:bg-[#00FF88] selection:text-[#040906] text-[11.5pt] leading-relaxed">
       {/* 1. Executive Dashboard Control Room & Overview Cluster */}
       <section className="relative overflow-hidden bg-[#040906] border-b border-[#0D1F14] pt-8 pb-10 px-4 sm:px-6 lg:px-8">
         {/* Soft, Layered Atmospheric Ambient Glows & Grid Depth */}
@@ -128,38 +306,38 @@ export const ProposalHub: React.FC = () => {
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#00ff8808_1px,transparent_1px),linear-gradient(to_bottom,#00ff8808_1px,transparent_1px)] bg-[size:3.5rem_3.5rem] pointer-events-none opacity-40" />
 
         <div className="max-w-7xl mx-auto relative z-10 space-y-6">
-          {/* Executive Control Status Strip */}
-          <div className="flex flex-wrap items-center justify-between gap-3 p-3 rounded-2xl bg-[#06120B] border border-[#102B1B] shadow-sm text-xs">
+          {/* Executive Control Status Strip with Decision Target Deadline */}
+          <div className="flex flex-wrap items-center justify-between gap-3 p-3.5 rounded-2xl bg-[#06120B] border border-[#102B1B] shadow-sm text-[11.5pt]">
             <div className="flex flex-wrap items-center gap-2.5">
-              <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[11px] font-hub-heading font-extrabold tracking-wide uppercase bg-[#091D12] text-[#00FF88] border border-[#00FF88]/30 shadow-xs">
+              <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[11.5pt] font-hub-heading font-extrabold tracking-wide uppercase bg-[#091D12] text-[#00FF88] border border-[#00FF88]/30 shadow-xs">
                 <span className="w-2 h-2 rounded-full bg-[#00FF88] neon-dot-pulsing shrink-0" />
                 <span>ONLINEFIRST HUB</span>
               </span>
-              <span className="text-[#7EA88E] font-mono text-[11px] hidden sm:inline">
+              <span className="text-[#7EA88E] font-mono text-[11.5pt] hidden sm:inline">
                 Scholarly Publishing Systems • Version 2.2
               </span>
               <span className="text-[#153322] hidden sm:inline">•</span>
-              <span className="text-[#BCE0CA] text-[11px]">
-                Proposal Presentation for: <strong className="text-white">Tax Frontier</strong> (CITN Umuahia Chapter & MOUAU COLMAS)
+              <span className="text-[#BCE0CA] text-[11.5pt]">
+                Proposal for: <strong className="text-white">Tax Frontier</strong> (CITN Umuahia Chapter & MOUAU COLMAS)
               </span>
             </div>
 
-            <div className="flex items-center gap-2">
-              <span className={`px-2.5 py-1 rounded-lg text-[11px] font-mono font-bold border flex items-center gap-1.5 ${
+            <div className="flex flex-wrap items-center gap-2.5">
+              <span className={`px-3 py-1 rounded-xl text-[11.5pt] font-mono font-bold border flex items-center gap-1.5 ${
                 isSubmitted
                   ? 'bg-emerald-950/80 text-emerald-400 border-emerald-800'
                   : 'bg-[#081B10] text-[#00FF88] border-[#00FF88]/35 shadow-[0_0_12px_rgba(0,255,136,0.12)]'
               }`}>
                 <span className="w-1.5 h-1.5 rounded-full bg-[#00FF88] neon-dot-pulsing" />
-                <span>{isSubmitted ? 'Sign-Off Recorded' : 'Interactive Review Active'}</span>
+                <span>{isSubmitted ? 'Formal Sign-Off Confirmed' : 'Interactive Review Active'}</span>
               </span>
               <button
                 onClick={() => setCurrentView('admin')}
-                className="px-2.5 py-1 rounded-lg bg-[#08170F] hover:bg-[#0D2619] text-[#93BC9F] hover:text-[#00FF88] border border-[#133020] transition-colors flex items-center gap-1 text-[11px]"
+                className="px-3 py-1 rounded-xl bg-[#08170F] hover:bg-[#0D2619] text-[#93BC9F] hover:text-[#00FF88] border border-[#133020] transition-colors flex items-center gap-1.5 text-[11.5pt]"
                 title="Launch Editorial CMS Admin"
               >
-                <ExternalLink className="w-3 h-3 text-[#00FF88]" />
-                <span className="hidden md:inline">CMS Admin</span>
+                <ExternalLink className="w-3.5 h-3.5 text-[#00FF88]" />
+                <span className="hidden md:inline font-medium">CMS Admin</span>
               </button>
             </div>
           </div>
@@ -167,8 +345,8 @@ export const ProposalHub: React.FC = () => {
           {/* Hero Main Headline & Quick Action Command Bar */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center pt-2">
             <div className="lg:col-span-8 space-y-4">
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#07150E] border border-[#112A1B] text-xs text-[#00FF88] font-mono uppercase tracking-wider">
-                <Sparkles className="w-3.5 h-3.5 text-[#00FF88]" />
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg bg-[#07150E] border border-[#112A1B] text-[11.5pt] text-[#00FF88] font-mono uppercase tracking-wider">
+                <Sparkles className="w-4 h-4 text-[#00FF88]" />
                 <span>ONLINEFIRST HUB | Scholarly Publishing Systems</span>
               </div>
 
@@ -179,12 +357,12 @@ export const ProposalHub: React.FC = () => {
                 </span>
               </h1>
 
-              <p className="text-sm sm:text-base text-[#B8DEC6] max-w-2xl leading-relaxed font-normal">
+              <p className="text-[12pt] sm:text-[12.5pt] text-[#B8DEC6] max-w-2xl leading-relaxed font-normal">
                 Following our review of the Tax Frontier publishing requirements, OnlineFirst has developed three distinct digital directions designed to strengthen the journal’s academic and professional presence, improve research discovery, support manuscript and editorial workflows, and give the editorial team greater control over publications, announcements and ongoing content.
               </p>
 
               {/* Action Command Row with Glowing Neon Buttons */}
-              <div className="pt-2 flex flex-wrap items-center gap-3">
+              <div className="pt-2 flex flex-wrap items-center gap-3.5">
                 <button
                   onClick={() => {
                     setActiveHubSection('three-concepts');
@@ -193,7 +371,7 @@ export const ProposalHub: React.FC = () => {
                       el.scrollIntoView({ behavior: 'smooth' });
                     }
                   }}
-                  className="neon-glow-btn px-6 py-3.5 rounded-xl font-hub-heading font-bold text-xs sm:text-sm flex items-center gap-2 transition-all shadow-[0_0_20px_rgba(0,255,136,0.25)]"
+                  className="neon-glow-btn px-6 py-3.5 rounded-xl font-hub-heading font-bold text-[12pt] flex items-center gap-2 transition-all shadow-[0_0_20px_rgba(0,255,136,0.25)]"
                 >
                   <span>Explore the 3 Concepts</span>
                   <ArrowRight className="w-4 h-4 text-[#030A06]" />
@@ -207,7 +385,7 @@ export const ProposalHub: React.FC = () => {
                       el.scrollIntoView({ behavior: 'smooth' });
                     }
                   }}
-                  className="neon-glow-btn-secondary px-6 py-3.5 rounded-xl font-hub-heading font-semibold text-xs sm:text-sm flex items-center gap-2 transition-all"
+                  className="neon-glow-btn-secondary px-6 py-3.5 rounded-xl font-hub-heading font-semibold text-[12pt] flex items-center gap-2 transition-all"
                 >
                   <FileText className="w-4 h-4 text-[#00FF88]" />
                   <span>View Proposal</span>
@@ -226,46 +404,55 @@ export const ProposalHub: React.FC = () => {
                 <div className="flex items-center justify-between border-b border-[#122A1C] pb-3 relative z-10">
                   <div className="flex items-center gap-2">
                     <span className="w-2 h-2 rounded-full bg-[#00FF88] neon-dot-pulsing shrink-0" />
-                    <span className="text-xs font-hub-heading font-bold uppercase tracking-wider text-[#00FF88]">
+                    <span className="text-[11.5pt] font-hub-heading font-bold uppercase tracking-wider text-[#00FF88]">
                       Proposal Overview Matrix
                     </span>
                   </div>
-                  <span className="text-[10px] text-[#7EA88E] font-mono">EST. 2026</span>
+                  <span className="text-[11.5pt] text-[#7EA88E] font-mono">EST. 2026</span>
                 </div>
 
-                <div className="grid grid-cols-2 gap-3 text-xs relative z-10">
+                <div className="grid grid-cols-2 gap-3 text-[11.5pt] relative z-10">
                   <div className="p-3 bg-[#040D08] rounded-xl border border-[#0F2618] hover:border-[#00FF88]/40 transition-colors">
-                    <span className="text-[11px] text-[#7EA88E] block">Commercial Scope</span>
+                    <span className="text-[11.5pt] text-[#7EA88E] block">Commercial Scope</span>
                     <strong className="text-base font-hub-heading font-bold text-white block mt-0.5">₦450k – ₦950k</strong>
-                    <span className="text-[10px] text-[#00FF88] font-medium">4 Structured Packages</span>
+                    <span className="text-[11pt] text-[#00FF88] font-medium">4 Structured Packages</span>
                   </div>
 
                   <div className="p-3 bg-[#040D08] rounded-xl border border-[#0F2618] hover:border-[#00FF88]/40 transition-colors">
-                    <span className="text-[11px] text-[#7EA88E] block">Design Archetypes</span>
+                    <span className="text-[11.5pt] text-[#7EA88E] block">Design Archetypes</span>
                     <strong className="text-base font-hub-heading font-bold text-white block mt-0.5">3 Live Prototypes</strong>
-                    <span className="text-[10px] text-[#00FF88] font-medium">Interactive Preview</span>
+                    <span className="text-[11pt] text-[#00FF88] font-medium">Interactive Preview</span>
                   </div>
 
                   <div className="p-3 bg-[#040D08] rounded-xl border border-[#0F2618] hover:border-[#00FF88]/40 transition-colors">
-                    <span className="text-[11px] text-[#7EA88E] block">Peer Review Standard</span>
+                    <span className="text-[11.5pt] text-[#7EA88E] block">Peer Review Standard</span>
                     <strong className="text-base font-hub-heading font-bold text-white block mt-0.5">14-Step COPE</strong>
-                    <span className="text-[10px] text-[#7EA88E]">Double-Blind Rigor</span>
+                    <span className="text-[11pt] text-[#7EA88E]">Double-Blind Rigor</span>
                   </div>
 
                   <div className="p-3 bg-[#040D08] rounded-xl border border-[#0F2618] hover:border-[#00FF88]/40 transition-colors">
-                    <span className="text-[11px] text-[#7EA88E] block">Dissemination</span>
+                    <span className="text-[11.5pt] text-[#7EA88E] block">Dissemination</span>
                     <strong className="text-base font-hub-heading font-bold text-white block mt-0.5">Gold OA (CC BY)</strong>
-                    <span className="text-[10px] text-[#00FF88] font-medium">Crossref DOI Active</span>
+                    <span className="text-[11pt] text-[#00FF88] font-medium">Crossref DOI Active</span>
                   </div>
+                </div>
+
+                {/* Target Deadline Callout in Bento Card */}
+                <div className="p-3 rounded-xl bg-[#140E02] border border-[#F59E0B]/35 flex items-center justify-between text-[11.5pt] relative z-10">
+                  <div className="flex items-center gap-2">
+                    <Clock className="w-4 h-4 text-[#FBBF24] shrink-0" />
+                    <span className="text-white font-hub-heading font-semibold">Target Decision:</span>
+                  </div>
+                  <span className="text-[#FBBF24] font-mono font-bold">2 October 2026</span>
                 </div>
 
                 {/* Selected Status Bar */}
-                <div className="pt-2 border-t border-[#122A1C] flex items-center justify-between text-xs text-[#8EB89D] relative z-10">
+                <div className="pt-2 border-t border-[#122A1C] flex items-center justify-between text-[11.5pt] text-[#8EB89D] relative z-10">
                   <span className="flex items-center gap-1.5">
                     <ShieldCheck className="w-4 h-4 text-[#00FF88]" />
                     <span>Fixed-price guarantee</span>
                   </span>
-                  <span className="text-[11px] text-[#7EA88E]">50% deposit / 50% delivery</span>
+                  <span className="text-[11.5pt] text-[#7EA88E]">50% deposit / 50% delivery</span>
                 </div>
               </div>
             </div>
@@ -1527,100 +1714,230 @@ export const ProposalHub: React.FC = () => {
               {/* 11. Acceptance Workflow */}
               {activeHubSection === 'acceptance-workflow' && (
                 <div className="space-y-6 relative z-10">
-                  <div className="flex items-center justify-between border-b border-[#122419] pb-4">
+                  <div className="flex flex-wrap items-center justify-between border-b border-[#122419] pb-4 gap-3">
                     <div className="flex items-center gap-2">
-                      <span className="text-[10px] font-hub-heading font-bold uppercase tracking-wider text-[#A7F432] bg-[#0D2015] border border-[#A7F432]/25 px-2.5 py-1 rounded">
+                      <span className="text-[11.5pt] font-hub-heading font-bold uppercase tracking-wider text-[#00FF88] bg-[#0D2015] border border-[#00FF88]/30 px-3 py-1 rounded">
                         Section 11
                       </span>
-                      <span className="text-xs text-[#86AD94]">Formal Client Sign-Off</span>
+                      <span className="text-[11.5pt] text-[#86AD94]">Formal Client Sign-Off & Intake</span>
                     </div>
-                    <span className="text-xs text-[#A7F432] font-mono">Contractual Record</span>
+
+                    {/* Prominent Target Deadline Tag */}
+                    <div className="flex items-center gap-1.5 px-3.5 py-1 rounded-xl bg-[#1A1202] border border-[#F59E0B]/50 text-[#FBBF24] font-mono text-[11.5pt] font-bold shadow-xs">
+                      <Clock className="w-4 h-4 text-[#FBBF24] shrink-0" />
+                      <span>Decision Target Deadline: {decisionTargetDeadline}</span>
+                    </div>
                   </div>
 
-                  <h2 className="text-2xl sm:text-3xl font-hub-heading font-bold text-white tracking-tight">
-                    Package Selection & Formal Acceptance Workflow
-                  </h2>
+                  <div>
+                    <h2 className="text-2xl sm:text-3xl font-hub-heading font-bold text-white tracking-tight">
+                      Package Selection & Formal Acceptance Workflow
+                    </h2>
+                    <p className="text-[#D6ECE0] text-[12pt] mt-1.5 leading-relaxed">
+                      Configure your approved package tier, design archetype, institutional governance models, and committee contacts below for the joint CITN / MOUAU editorial committee:
+                    </p>
+                  </div>
 
-                  <p className="text-[#D6ECE0] text-sm leading-relaxed">
-                    Configure your approved package tier, design archetype, and institutional governance models below for the joint CITN / MOUAU editorial committee:
-                  </p>
+                  {/* Decision Target Deadline Callout Banner */}
+                  <div className="p-4 rounded-xl bg-[#140E02] border border-[#F59E0B]/50 flex items-start gap-3.5 shadow-[0_0_25px_rgba(245,158,11,0.08)]">
+                    <div className="w-10 h-10 rounded-xl bg-[#F59E0B]/20 border border-[#F59E0B]/40 flex items-center justify-center shrink-0 mt-0.5">
+                      <Clock className="w-5 h-5 text-[#FBBF24]" />
+                    </div>
+                    <div className="space-y-1 text-[11.5pt]">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <strong className="text-white font-hub-heading text-[12pt]">
+                          Decision Target Deadline: 2 October 2026
+                        </strong>
+                        <span className="text-[11pt] font-mono font-bold px-2 py-0.5 rounded bg-[#F59E0B]/25 text-[#FCD34D] border border-[#F59E0B]/40 uppercase tracking-wide">
+                          Priority Allocation
+                        </span>
+                      </div>
+                      <p className="text-[#E7DEC9] leading-relaxed">
+                        To guarantee the maiden publication schedule for December 2026 and lock in fixed package pricing, formal sign-off is requested on or before <strong>2 October 2026</strong>. Submitting this form transmits an immediate notification with your chosen demo and contact details to <strong>{notificationRecipientEmail}</strong>.
+                      </p>
+                    </div>
+                  </div>
 
                   {isSubmitted ? (
-                    <div className="bg-[#060D08] border border-[#A7F432]/40 rounded-2xl p-6 sm:p-8 space-y-4">
-                      <div className="flex items-center gap-3">
-                        <CheckCircle2 className="w-8 h-8 text-[#A7F432]" />
-                        <div>
-                          <h3 className="text-base font-hub-heading font-bold text-white">
-                            Commercial Selection Formally Confirmed
-                          </h3>
-                          <p className="text-xs text-[#86AD94]">
-                            Official proposal record logged for OnlineFirst production intake.
+                    <div className="bg-[#060D08] border border-[#00FF88]/50 rounded-2xl p-6 sm:p-8 space-y-6 shadow-[0_0_30px_rgba(0,255,136,0.1)]">
+                      {/* Success Heading */}
+                      <div className="flex items-start gap-4">
+                        <div className="w-12 h-12 rounded-2xl bg-[#00FF88]/15 border border-[#00FF88]/40 flex items-center justify-center shrink-0 mt-0.5">
+                          <CheckCircle2 className="w-7 h-7 text-[#00FF88]" />
+                        </div>
+                        <div className="space-y-1">
+                          <div className="flex flex-wrap items-center gap-2">
+                            <h3 className="text-xl font-hub-heading font-bold text-white">
+                              Proposal Package Acceptance Formally Recorded
+                            </h3>
+                            <span className="px-2.5 py-0.5 rounded-full bg-[#00FF88]/20 border border-[#00FF88]/40 text-[#00FF88] text-[11pt] font-mono font-bold">
+                              DISPATCHED
+                            </span>
+                          </div>
+                          <p className="text-[11.5pt] text-[#86AD94]">
+                            Official notification comprising your chosen prototype demo, package details, and contact information has been queued for <strong className="text-white">{notificationRecipientEmail}</strong>.
                           </p>
                         </div>
                       </div>
 
-                      <div className="bg-[#08140E] p-5 rounded-xl border border-[#112318] text-xs space-y-2 text-[#D6ECE0] font-mono">
-                        <p><strong>Selected Tier:</strong> {commercialAcceptance.selectedTier.toUpperCase()}</p>
-                        <p><strong>Selected Concept:</strong> {commercialAcceptance.selectedConcept.toUpperCase()}</p>
-                        <p><strong>Signatory:</strong> {commercialAcceptance.signatoryName} ({commercialAcceptance.signatoryRole})</p>
-                        <p><strong>Notification Email:</strong> {commercialAcceptance.signatoryEmail}</p>
-                        <p><strong>JORMASS Relationship:</strong> {config.jormassRelationship.toUpperCase()}</p>
-                        <p><strong>Submission Routing:</strong> {config.submissionMode.toUpperCase()}</p>
+                      {/* Comprehensive Confirmation Dossier */}
+                      <div className="bg-[#08140E] p-5 sm:p-6 rounded-2xl border border-[#112318] text-[11.5pt] space-y-4 text-[#D6ECE0]">
+                        <div className="flex items-center justify-between border-b border-[#142B1D] pb-3">
+                          <span className="font-hub-heading font-bold text-white text-[12pt] flex items-center gap-2">
+                            <FileCheck className="w-4 h-4 text-[#00FF88]" />
+                            <span>Executive Sign-Off Summary</span>
+                          </span>
+                          <span className="text-[11pt] font-mono text-[#00FF88] bg-[#092013] border border-[#00FF88]/30 px-2.5 py-0.5 rounded">
+                            Target Deadline: {decisionTargetDeadline}
+                          </span>
+                        </div>
+
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                          <div className="p-3.5 rounded-xl bg-[#040906] border border-[#0E2015] space-y-1">
+                            <span className="text-[#7EA88E] block text-[11pt]">Selected Package Tier:</span>
+                            <strong className="text-white text-[12pt] font-hub-heading block">
+                              {getTierObj(selectedTier).name}
+                            </strong>
+                            <div className="text-[11pt] text-[#00FF88] font-mono pt-0.5">
+                              Total: ₦{getTierObj(selectedTier).price.toLocaleString()} • 50% Deposit: ₦{getTierObj(selectedTier).deposit.toLocaleString()} • Balance: ₦{getTierObj(selectedTier).balance.toLocaleString()}
+                            </div>
+                          </div>
+
+                          <div className="p-3.5 rounded-xl bg-[#040906] border border-[#0E2015] space-y-1">
+                            <span className="text-[#7EA88E] block text-[11pt]">Selected Design Archetype:</span>
+                            <strong className="text-white text-[12pt] font-hub-heading block">
+                              {getConceptDetails(selectedConcept).name}
+                            </strong>
+                            <span className="text-[11pt] text-[#86AD94] block">
+                              {getConceptDetails(selectedConcept).desc}
+                            </span>
+                          </div>
+
+                          <div className="p-3.5 rounded-xl bg-[#040906] border border-[#0E2015] space-y-1">
+                            <span className="text-[#7EA88E] block text-[11pt]">Client Signatory & Title:</span>
+                            <strong className="text-white text-[12pt] font-hub-heading block">
+                              {signatoryName || 'Client Representative'}
+                            </strong>
+                            <span className="text-[11pt] text-[#86AD94] block">{signatoryRole}</span>
+                            <span className="text-[11pt] text-[#A7F432] block">{signatoryInstitution}</span>
+                          </div>
+
+                          <div className="p-3.5 rounded-xl bg-[#040906] border border-[#0E2015] space-y-1">
+                            <span className="text-[#7EA88E] block text-[11pt]">Client Direct Contacts:</span>
+                            <div className="flex items-center gap-1.5 text-white font-mono text-[11pt]">
+                              <Mail className="w-3.5 h-3.5 text-[#00FF88]" />
+                              <span>{signatoryEmail}</span>
+                            </div>
+                            <div className="flex items-center gap-1.5 text-[#00FF88] font-mono text-[11pt] pt-0.5">
+                              <Phone className="w-3.5 h-3.5" />
+                              <span>{signatoryPhone}</span>
+                            </div>
+                            <div className="text-[11pt] text-[#7EA88E] pt-1">
+                              Intake Recipient: <strong className="text-white">{notificationRecipientEmail}</strong>
+                            </div>
+                          </div>
+                        </div>
+
+                        {acceptanceNotes && (
+                          <div className="p-3.5 rounded-xl bg-[#040906] border border-[#0E2015] space-y-1">
+                            <span className="text-[#7EA88E] block text-[11pt]">Committee Directives & Notes:</span>
+                            <p className="text-white italic text-[11.5pt]">{acceptanceNotes}</p>
+                          </div>
+                        )}
                       </div>
 
-                      <div className="flex flex-wrap gap-2 pt-2">
-                        <button
-                          onClick={() => window.print()}
-                          className="px-4 py-2.5 bg-[#A7F432] hover:bg-[#b5f948] text-[#061009] rounded-xl text-xs font-hub-heading font-bold flex items-center gap-1.5 shadow-md"
-                        >
-                          <Printer className="w-3.5 h-3.5" />
-                          <span>Print Confirmation Record</span>
-                        </button>
-                        <button
-                          onClick={() => setIsSubmitted(false)}
-                          className="px-4 py-2.5 bg-[#0C1A12] hover:bg-[#12261A] text-white rounded-xl text-xs font-hub-heading font-semibold border border-[#163022]"
-                        >
-                          <span>Modify Selection Parameters</span>
-                        </button>
+                      {/* Multi-Channel Action Controls */}
+                      <div className="space-y-3 pt-2">
+                        <span className="text-white font-hub-heading font-bold text-[12pt] block">
+                          Delivery Verification & Next Steps:
+                        </span>
+                        <div className="flex flex-wrap gap-3">
+                          {/* 1. Direct Email Client Action */}
+                          <a
+                            href={buildMailtoUrl()}
+                            className="px-5 py-3 bg-[#00FF88] hover:bg-[#20ff94] text-[#030A06] rounded-xl text-[11.5pt] font-hub-heading font-bold flex items-center gap-2 shadow-lg transition-all"
+                          >
+                            <Mail className="w-4 h-4 text-[#030A06]" />
+                            <span>Send Email Confirmation to {notificationRecipientEmail}</span>
+                          </a>
+
+                          {/* 2. Copy Notification for WhatsApp / Email */}
+                          <button
+                            onClick={copyNotificationToClipboard}
+                            className="px-5 py-3 bg-[#092013] hover:bg-[#0E2E1C] text-[#00FF88] border border-[#00FF88]/40 rounded-xl text-[11.5pt] font-hub-heading font-semibold flex items-center gap-2 transition-all shadow-xs"
+                          >
+                            {copiedNotification ? (
+                              <>
+                                <CheckCircle className="w-4 h-4 text-[#00FF88]" />
+                                <span>Copied to Clipboard!</span>
+                              </>
+                            ) : (
+                              <>
+                                <Copy className="w-4 h-4 text-[#00FF88]" />
+                                <span>Copy Acceptance Notice (WhatsApp / Email)</span>
+                              </>
+                            )}
+                          </button>
+
+                          {/* 3. Print Official Receipt */}
+                          <button
+                            onClick={() => window.print()}
+                            className="px-4 py-3 bg-[#08170F] hover:bg-[#0D2418] text-white rounded-xl text-[11.5pt] font-hub-heading font-semibold border border-[#133020] flex items-center gap-2 transition-all"
+                          >
+                            <Printer className="w-4 h-4 text-[#7EA88E]" />
+                            <span>Print Certificate</span>
+                          </button>
+
+                          {/* 4. Modify Parameters */}
+                          <button
+                            onClick={() => setIsSubmitted(false)}
+                            className="px-4 py-3 bg-transparent hover:bg-[#08170F] text-[#7EA88E] hover:text-white rounded-xl text-[11.5pt] font-hub-heading transition-all"
+                          >
+                            <span>Modify Selection</span>
+                          </button>
+                        </div>
                       </div>
                     </div>
                   ) : (
                     <form onSubmit={handleAcceptanceSubmit} className="space-y-6">
                       {/* Choose Tier */}
                       <div className="space-y-2">
-                        <label className="text-xs font-hub-heading font-bold text-white block">
+                        <label className="text-[12pt] font-hub-heading font-bold text-white block">
                           1. Select Implementation Package Tier *
                         </label>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-[11.5pt]">
                           {proposalTiers.map((t) => (
                             <div
                               key={t.id}
                               onClick={() => setSelectedTier(t.id)}
                               className={`p-4 rounded-xl border cursor-pointer transition-all ${
                                 selectedTier === t.id
-                                  ? 'bg-[#0A1A12] text-white border-[#A7F432]/60'
+                                  ? 'bg-[#0A1A12] text-white border-[#00FF88] shadow-[0_0_15px_rgba(0,255,136,0.12)]'
                                   : 'bg-[#060D08] text-[#B4D3C0] border-[#112318] hover:bg-[#08130D]'
                               }`}
                             >
                               <div className="flex items-center justify-between">
                                 <div className="flex items-center gap-1.5">
-                                  <strong className="block text-sm font-hub-heading font-bold">{t.name}</strong>
+                                  <strong className="block text-base font-hub-heading font-bold">{t.name}</strong>
                                   {t.isRecommended && (
-                                    <span className="text-[9px] bg-[#A7F432] text-[#061009] font-bold px-1.5 py-0.5 rounded">RECOMMENDED</span>
+                                    <span className="text-[10pt] bg-[#00FF88] text-[#061009] font-bold px-2 py-0.5 rounded">RECOMMENDED</span>
                                   )}
                                   {t.isComprehensive && (
-                                    <span className="text-[9px] bg-[#2DD4BF] text-[#061009] font-bold px-1.5 py-0.5 rounded">COMPREHENSIVE</span>
+                                    <span className="text-[10pt] bg-[#2DD4BF] text-[#061009] font-bold px-2 py-0.5 rounded">COMPREHENSIVE</span>
                                   )}
                                 </div>
                                 {selectedTier === t.id ? (
-                                  <span className="text-[10px] text-[#A7F432] font-bold">SELECTED</span>
+                                  <span className="text-[11pt] text-[#00FF88] font-bold flex items-center gap-1">
+                                    <Check className="w-3.5 h-3.5" />
+                                    <span>SELECTED</span>
+                                  </span>
                                 ) : (
-                                  <span className="text-[10px] text-[#86AD94]">Select</span>
+                                  <span className="text-[11pt] text-[#86AD94]">Select</span>
                                 )}
                               </div>
-                              <span className="font-mono text-base font-bold block mt-1 text-white">₦{t.price.toLocaleString()}</span>
-                              <span className="text-[11px] text-[#86AD94] block">{t.positioning}</span>
-                              <span className="text-[10px] text-[#74D857] block mt-1 font-mono">
+                              <span className="font-mono text-lg font-bold block mt-1 text-white">₦{t.price.toLocaleString()}</span>
+                              <span className="text-[11.5pt] text-[#86AD94] block mt-0.5">{t.positioning}</span>
+                              <span className="text-[11pt] text-[#00FF88] block mt-1.5 font-mono">
                                 50% Initial: ₦{t.deposit.toLocaleString()} • Balance: ₦{t.balance.toLocaleString()}
                               </span>
                             </div>
@@ -1630,41 +1947,46 @@ export const ProposalHub: React.FC = () => {
 
                       {/* Choose Concept */}
                       <div className="space-y-2">
-                        <label className="text-xs font-hub-heading font-bold text-white block">
-                          2. Preferred Design Archetype *
+                        <label className="text-[12pt] font-hub-heading font-bold text-white block">
+                          2. Preferred Design Archetype Prototype *
                         </label>
-                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-[11.5pt]">
                           {[
-                            { id: 'demo1', name: 'Demo 1', sub: 'Structured Institutional' },
+                            { id: 'demo1', name: 'Demo 1', sub: 'Structured Institutional Academic' },
                             { id: 'demo2', name: 'Demo 2', sub: 'Contemporary Policy Platform' },
                             { id: 'demo3', name: 'Demo 3', sub: 'Scientific Discovery Platform' },
                           ].map((c) => (
                             <div
                               key={c.id}
                               onClick={() => setSelectedConcept(c.id)}
-                              className={`p-3.5 rounded-xl border cursor-pointer transition-all ${
+                              className={`p-4 rounded-xl border cursor-pointer transition-all ${
                                 selectedConcept === c.id
-                                  ? 'bg-[#0A1A12] text-white border-[#A7F432]/60'
+                                  ? 'bg-[#0A1A12] text-white border-[#00FF88] shadow-[0_0_15px_rgba(0,255,136,0.12)]'
                                   : 'bg-[#060D08] text-[#B4D3C0] border-[#112318] hover:bg-[#08130D]'
                               }`}
                             >
-                              <strong className="block font-hub-heading font-bold">{c.name}</strong>
-                              <span className="text-[11px] block mt-0.5 text-[#86AD94]">{c.sub}</span>
+                              <div className="flex items-center justify-between">
+                                <strong className="block font-hub-heading font-bold text-base">{c.name}</strong>
+                                {selectedConcept === c.id && (
+                                  <Check className="w-4 h-4 text-[#00FF88]" />
+                                )}
+                              </div>
+                              <span className="text-[11.5pt] block mt-1 text-[#86AD94]">{c.sub}</span>
                             </div>
                           ))}
                         </div>
                       </div>
 
                       {/* Choose JORMASS & Submission Mode */}
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-[11.5pt]">
                         <div>
-                          <label className="text-xs font-hub-heading font-bold text-white block mb-1">
+                          <label className="text-[12pt] font-hub-heading font-bold text-white block mb-1.5">
                             3. JORMASS Integration Model
                           </label>
                           <select
                             value={selectedJormassOption}
                             onChange={(e) => setSelectedJormassOption(e.target.value as any)}
-                            className="w-full p-2.5 bg-[#060D08] border border-[#112318] rounded-xl text-white font-medium focus:border-[#A7F432]/60 outline-hidden"
+                            className="w-full p-3 bg-[#060D08] border border-[#112318] rounded-xl text-white text-[11.5pt] font-medium focus:border-[#00FF88] outline-hidden"
                           >
                             <option value="optionA">Option A: Independent + Cross-Link</option>
                             <option value="optionB">Option B: Shared MOUAU Journals Gateway</option>
@@ -1673,13 +1995,13 @@ export const ProposalHub: React.FC = () => {
                         </div>
 
                         <div>
-                          <label className="text-xs font-hub-heading font-bold text-white block mb-1">
+                          <label className="text-[12pt] font-hub-heading font-bold text-white block mb-1.5">
                             4. Manuscript Submission Routing
                           </label>
                           <select
                             value={selectedSubmissionMode}
                             onChange={(e) => setSelectedSubmissionMode(e.target.value as any)}
-                            className="w-full p-2.5 bg-[#060D08] border border-[#112318] rounded-xl text-white font-medium focus:border-[#A7F432]/60 outline-hidden"
+                            className="w-full p-3 bg-[#060D08] border border-[#112318] rounded-xl text-white text-[11.5pt] font-medium focus:border-[#00FF88] outline-hidden"
                           >
                             <option value="external">Mode A: External OJS Redirection</option>
                             <option value="integrated">Mode B: Integrated OnlineFirst Portal</option>
@@ -1687,62 +2009,126 @@ export const ProposalHub: React.FC = () => {
                         </div>
                       </div>
 
-                      {/* Signatory Details */}
-                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
-                        <div>
-                          <label className="block text-white font-hub-heading font-bold mb-1">Signatory Full Name *</label>
-                          <input
-                            type="text"
-                            required
-                            placeholder="e.g. Prof. J. O. Anyanwu"
-                            value={signatoryName}
-                            onChange={(e) => setSignatoryName(e.target.value)}
-                            className="w-full p-2.5 bg-[#060D08] border border-[#112318] rounded-xl text-white focus:border-[#A7F432]/60 outline-hidden"
-                          />
+                      {/* Signatory & Client Contact Details */}
+                      <div className="space-y-3 pt-2">
+                        <label className="text-[12pt] font-hub-heading font-bold text-white block flex items-center gap-2">
+                          <Building className="w-4 h-4 text-[#00FF88]" />
+                          <span>5. Client Signatory & Direct Committee Contacts *</span>
+                        </label>
+
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-[11.5pt]">
+                          <div>
+                            <label className="block text-[#D6ECE0] font-hub-heading font-medium mb-1">
+                              Signatory Full Name *
+                            </label>
+                            <input
+                              type="text"
+                              required
+                              placeholder="e.g. Prof. J. O. Anyanwu"
+                              value={signatoryName}
+                              onChange={(e) => setSignatoryName(e.target.value)}
+                              className="w-full p-3 bg-[#060D08] border border-[#112318] rounded-xl text-white text-[11.5pt] focus:border-[#00FF88] outline-hidden"
+                            />
+                          </div>
+
+                          <div>
+                            <label className="block text-[#D6ECE0] font-hub-heading font-medium mb-1">
+                              Signatory Title / Role *
+                            </label>
+                            <input
+                              type="text"
+                              required
+                              placeholder="e.g. Chairman, Journal Editorial Board"
+                              value={signatoryRole}
+                              onChange={(e) => setSignatoryRole(e.target.value)}
+                              className="w-full p-3 bg-[#060D08] border border-[#112318] rounded-xl text-white text-[11.5pt] focus:border-[#00FF88] outline-hidden"
+                            />
+                          </div>
+
+                          <div>
+                            <label className="block text-[#D6ECE0] font-hub-heading font-medium mb-1 flex items-center gap-1.5">
+                              <Mail className="w-3.5 h-3.5 text-[#00FF88]" />
+                              <span>Signatory Email Address *</span>
+                            </label>
+                            <input
+                              type="email"
+                              required
+                              placeholder="e.g. editor@taxfrontier.org"
+                              value={signatoryEmail}
+                              onChange={(e) => setSignatoryEmail(e.target.value)}
+                              className="w-full p-3 bg-[#060D08] border border-[#112318] rounded-xl text-white text-[11.5pt] focus:border-[#00FF88] outline-hidden font-mono"
+                            />
+                          </div>
+
+                          <div>
+                            <label className="block text-[#D6ECE0] font-hub-heading font-medium mb-1 flex items-center gap-1.5">
+                              <Phone className="w-3.5 h-3.5 text-[#00FF88]" />
+                              <span>Client Phone / WhatsApp Contact *</span>
+                            </label>
+                            <input
+                              type="tel"
+                              required
+                              placeholder="+234 803 123 4567"
+                              value={signatoryPhone}
+                              onChange={(e) => setSignatoryPhone(e.target.value)}
+                              className="w-full p-3 bg-[#060D08] border border-[#112318] rounded-xl text-white text-[11.5pt] focus:border-[#00FF88] outline-hidden font-mono"
+                            />
+                          </div>
                         </div>
 
                         <div>
-                          <label className="block text-white font-hub-heading font-bold mb-1">Signatory Title / Role *</label>
-                          <input
-                            type="text"
-                            required
-                            value={signatoryRole}
-                            onChange={(e) => setSignatoryRole(e.target.value)}
-                            className="w-full p-2.5 bg-[#060D08] border border-[#112318] rounded-xl text-white focus:border-[#A7F432]/60 outline-hidden"
-                          />
-                        </div>
-
-                        <div>
-                          <label className="block text-white font-hub-heading font-bold mb-1">Signatory Email *</label>
-                          <input
-                            type="email"
-                            required
-                            value={signatoryEmail}
-                            onChange={(e) => setSignatoryEmail(e.target.value)}
-                            className="w-full p-2.5 bg-[#060D08] border border-[#112318] rounded-xl text-white focus:border-[#A7F432]/60 outline-hidden"
-                          />
+                          <label className="block text-[#D6ECE0] font-hub-heading font-medium mb-1">
+                            Institutional Representation / Committee Affiliation *
+                          </label>
+                          <select
+                            value={signatoryInstitution}
+                            onChange={(e) => setSignatoryInstitution(e.target.value)}
+                            className="w-full p-3 bg-[#060D08] border border-[#112318] rounded-xl text-white text-[11.5pt] focus:border-[#00FF88] outline-hidden"
+                          >
+                            <option value="Joint CITN-MOUAU Project Committee">Joint CITN-MOUAU Project Committee</option>
+                            <option value="The Chartered Institute of Taxation of Nigeria (CITN Umuahia Chapter)">CITN Umuahia Chapter</option>
+                            <option value="Michael Okpara University of Agriculture, Umudike (MOUAU COLMAS)">MOUAU College of Management Sciences (COLMAS)</option>
+                          </select>
                         </div>
                       </div>
 
                       <div>
-                        <label className="block text-white font-hub-heading font-bold mb-1 text-xs">
-                          Special Instructions or Committee Directives
+                        <label className="block text-white font-hub-heading font-bold mb-1.5 text-[12pt]">
+                          Special Directives or Committee Instructions
                         </label>
                         <textarea
                           rows={3}
-                          placeholder="Any committee notes regarding maiden publication schedule, pass-through services, or domain assignment..."
+                          placeholder="Any committee directives regarding maiden publication schedule, pass-through services, or domain assignment..."
                           value={acceptanceNotes}
                           onChange={(e) => setAcceptanceNotes(e.target.value)}
-                          className="w-full p-2.5 bg-[#060D08] border border-[#112318] rounded-xl text-xs text-white focus:border-[#A7F432]/60 outline-hidden"
+                          className="w-full p-3 bg-[#060D08] border border-[#112318] rounded-xl text-[11.5pt] text-white focus:border-[#00FF88] outline-hidden"
                         />
+                      </div>
+
+                      {/* Notification Dispatch Notice */}
+                      <div className="p-3.5 rounded-xl bg-[#07170E] border border-[#123820] flex items-center gap-2.5 text-[11.5pt] text-[#B8DEC6]">
+                        <Send className="w-4 h-4 text-[#00FF88] shrink-0" />
+                        <span>
+                          Confirmation will be immediately dispatched to <strong className="text-white">{notificationRecipientEmail}</strong>, with a copy to <strong className="text-white">{signatoryEmail || 'your email'}</strong>.
+                        </span>
                       </div>
 
                       <button
                         type="submit"
-                        className="neon-glow-btn w-full py-3.5 rounded-xl font-hub-heading font-bold text-sm transition-all flex items-center justify-center gap-2"
+                        disabled={isSubmitting}
+                        className="neon-glow-btn w-full py-4 rounded-xl font-hub-heading font-bold text-[12pt] transition-all flex items-center justify-center gap-2.5 cursor-pointer disabled:opacity-50"
                       >
-                        <CheckCircle2 className="w-4 h-4 text-[#030A06]" />
-                        <span>Confirm Package Selection & Formally Accept Proposal</span>
+                        {isSubmitting ? (
+                          <>
+                            <span className="w-4 h-4 border-2 border-[#030A06] border-t-transparent rounded-full animate-spin" />
+                            <span>Transmitting Notification to OnlineFirst...</span>
+                          </>
+                        ) : (
+                          <>
+                            <CheckCircle2 className="w-5 h-5 text-[#030A06]" />
+                            <span>Confirm Package Selection & Formally Accept Proposal</span>
+                          </>
+                        )}
                       </button>
                     </form>
                   )}

@@ -85,6 +85,7 @@ export interface JournalConfig {
   creativeCommonsLicense: string;
   creativeCommonsStatus: 'CONFIRMED' | 'CLIENT CONFIRMATION REQUIRED';
   similarityThreshold: number; // 15%
+  decisionTargetDeadline?: string; // 2 October 2026
 }
 
 export interface EditorialMember {

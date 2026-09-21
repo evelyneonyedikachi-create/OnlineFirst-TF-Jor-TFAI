@@ -52,6 +52,42 @@
   font-family: 'Inter', 'Roboto', sans-serif;
 }
 
+/* Proposal Hub Typography & Readability (Minimum 11.5pt requirement) */
+.proposal-hub-root {
+  font-size: 11.5pt;
+  line-height: 1.65;
+}
+
+.proposal-hub-root p,
+.proposal-hub-root li,
+.proposal-hub-root td,
+.proposal-hub-root th,
+.proposal-hub-root label,
+.proposal-hub-root input,
+.proposal-hub-root select,
+.proposal-hub-root textarea,
+.proposal-hub-root button,
+.proposal-hub-root span:not([class*="w-"]):not([class*="h-"]) {
+  font-size: max(11.5pt, 1em);
+}
+
+.proposal-hub-root .text-\[9px\],
+.proposal-hub-root .text-\[10px\],
+.proposal-hub-root .text-\[11px\],
+.proposal-hub-root .text-\[12px\],
+.proposal-hub-root .text-\[13px\],
+.proposal-hub-root .text-\[14px\],
+.proposal-hub-root .text-xs,
+.proposal-hub-root .text-sm {
+  font-size: 11.5pt !important;
+  line-height: 1.55 !important;
+}
+
+.proposal-hub-root .text-base {
+  font-size: 12.5pt !important;
+  line-height: 1.6 !important;
+}
+
 /* Atmospheric, refined luxury glows */
 .glow-lime {
   box-shadow: 0 4px 20px -2px rgba(167, 244, 50, 0.16);

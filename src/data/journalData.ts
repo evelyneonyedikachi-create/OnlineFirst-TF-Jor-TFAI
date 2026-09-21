@@ -48,6 +48,7 @@ export const initialJournalConfig: JournalConfig = {
   creativeCommonsLicense: 'CC BY 4.0 (Recommended, subject to final board adoption)',
   creativeCommonsStatus: 'CLIENT CONFIRMATION REQUIRED',
   similarityThreshold: 15, // 15% maximum Turnitin similarity threshold
+  decisionTargetDeadline: 'October 2, 2026',
 };
 
 export const subjectTaxonomies = [
