@@ -1,0 +1,381 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    /* Brand Core (Demo 1 & Proposal Hub) */
+    --brand-forest-dark: #042417;
+    --brand-forest: #073824;
+    --brand-emerald: #0B4D32;
+    --brand-teal-dark: #062822;
+    --brand-gold: #C5A059;
+    --brand-gold-muted: #9E7D3B;
+    --brand-gold-metallic: linear-gradient(135deg, #E6CA85 0%, #C59F54 50%, #B88E3E 100%);
+    --brand-ivory: #FAF8F5;
+    --brand-ivory-warm: #F4F1EA;
+    --brand-charcoal: #121A16;
+
+    /* Scientific Discovery Palette (Demo 3 - IJOASAR scientific style modernized) */
+    --scientific-deep-moss: #183326;
+    --scientific-moss: #224736;
+    --scientific-green: #2F6C50;
+    --scientific-leaf: #3D8865;
+    --scientific-sage: #D2E4D8;
+    --scientific-sage-light: #EEF5F1;
+    --scientific-cream: #FAF8F2;
+    --scientific-charcoal: #1C2621;
+
+    /* Demo 1 Institutional Academic Palette */
+    --d1-dark-green: #012509;
+    --d1-gold: #C48A36;
+    --d1-burnt-orange: #BF6521;
+    --d1-soft-tan: #D7A37B;
+    --d1-light-neutral: #DFD5CE;
+
+    /* Proposal Hub: AI-Artistic Futuristic Green Theme */
+    --hub-lime: #A7F432;
+    --hub-dark: #070F0B;
+    --hub-darker: #050A07;
+    --hub-surface: #0A1610;
+    --hub-surface-elevated: #0E1E16;
+    --hub-surface-card: #0C1A13;
+    --hub-neutral: #EAF3E7;
+    --hub-teal: #3B8F7B;
+  }
+}
+
+.font-hub-heading {
+  font-family: 'Plus Jakarta Sans', 'Montserrat', 'Inter', sans-serif;
+  letter-spacing: -0.025em;
+}
+
+.font-hub-body {
+  font-family: 'Inter', 'Roboto', sans-serif;
+}
+
+/* Atmospheric, refined luxury glows */
+.glow-lime {
+  box-shadow: 0 4px 20px -2px rgba(167, 244, 50, 0.16);
+}
+
+.glow-lime-sm {
+  box-shadow: 0 2px 12px -2px rgba(167, 244, 50, 0.12);
+}
+
+.glow-lime-hover {
+  transition: box-shadow 0.25s ease, transform 0.15s ease;
+}
+.glow-lime-hover:hover {
+  box-shadow: 0 0 24px rgba(167, 244, 50, 0.25);
+}
+
+.glow-card-ambient {
+  box-shadow: 0 20px 45px -12px rgba(0, 0, 0, 0.8), 0 0 50px -10px rgba(167, 244, 50, 0.04);
+}
+
+.glow-teal-sm {
+  box-shadow: 0 2px 12px -2px rgba(59, 143, 123, 0.15);
+}
+
+.font-d1-heading {
+  font-family: 'Playfair Display', Georgia, serif;
+  letter-spacing: -0.015em;
+}
+
+.font-d1-hero-title {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.12;
+}
+
+.font-d1-serif {
+  font-family: 'Playfair Display', Georgia, serif;
+}
+
+.font-d1-body {
+  font-family: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.font-d1-ui {
+  font-family: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.font-d1-mono {
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+.font-display {
+  font-family: 'Plus Jakarta Sans', 'Montserrat', 'Inter', sans-serif;
+}
+
+.font-editorial {
+  font-family: 'Montserrat', 'Plus Jakarta Sans', 'Inter', sans-serif;
+}
+
+.font-serif-modern {
+  font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+}
+
+.font-sans-modern {
+  font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+}
+
+.font-sans-platform {
+  font-family: 'Plus Jakarta Sans', 'DM Sans', 'Inter', sans-serif;
+}
+
+.font-sans-clean {
+  font-family: 'Inter', 'Manrope', sans-serif;
+}
+
+/* Dashboard Framed Workspace & 3D Lighting Accents */
+.dashboard-screen-frame {
+  box-shadow: 
+    0 0 0 1px rgba(167, 244, 50, 0.14),
+    0 24px 60px -12px rgba(0, 0, 0, 0.9),
+    0 0 90px -25px rgba(167, 244, 50, 0.12);
+}
+
+.dashboard-panel-elevated {
+  background: linear-gradient(180deg, rgba(14, 30, 22, 0.92) 0%, rgba(8, 18, 13, 0.98) 100%);
+  border: 1px solid rgba(25, 60, 42, 0.7);
+  box-shadow: 
+    inset 0 1px 0 0 rgba(167, 244, 50, 0.2),
+    0 12px 36px -6px rgba(0, 0, 0, 0.75);
+}
+
+.dashboard-highlight-card {
+  position: relative;
+  background: radial-gradient(circle at top left, rgba(167, 244, 50, 0.12), transparent 70%), #0A1711;
+  border: 1px solid rgba(167, 244, 50, 0.3);
+  box-shadow: 0 12px 32px -8px rgba(0, 0, 0, 0.7);
+}
+
+.dashboard-highlight-card:hover {
+  border-color: rgba(167, 244, 50, 0.55);
+  box-shadow: 0 16px 44px -8px rgba(167, 244, 50, 0.22);
+}
+
+/* Demo 3: Scientific Discovery High-Performance UI Classes */
+.demo3-gradient-hero {
+  background: 
+    radial-gradient(ellipse at 80% 10%, rgba(212, 174, 99, 0.12), transparent 50%),
+    radial-gradient(ellipse at 20% 40%, rgba(191, 232, 210, 0.08), transparent 55%),
+    linear-gradient(180deg, #071510 0%, #0D2319 60%, #133324 100%);
+}
+
+.demo3-card-glass {
+  background: rgba(10, 26, 19, 0.85);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(212, 174, 99, 0.22);
+  box-shadow: 0 16px 36px -10px rgba(0, 0, 0, 0.6);
+  transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.demo3-card-glass:hover {
+  transform: translateY(-3px);
+  border-color: rgba(212, 174, 99, 0.45);
+  box-shadow: 0 20px 45px -10px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(212, 174, 99, 0.2);
+}
+
+.demo3-card-light {
+  background: #FFFFFF;
+  border: 1px solid #D7E7DE;
+  box-shadow: 
+    0 1px 3px rgba(11, 37, 25, 0.04),
+    0 10px 28px -6px rgba(11, 37, 25, 0.08);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.demo3-card-light:hover {
+  transform: translateY(-2px);
+  border-color: #10B981;
+  box-shadow: 
+    0 16px 36px -8px rgba(16, 185, 129, 0.18),
+    0 0 0 1px rgba(16, 185, 129, 0.15);
+}
+
+.demo3-accent-glow {
+  box-shadow: 0 0 20px -2px rgba(212, 174, 99, 0.25);
+}
+
+.scientific-card-depth {
+  background: linear-gradient(180deg, #FFFFFF 0%, #F9FBF9 100%);
+  border: 1px solid #D2E4D8;
+  box-shadow: 
+    0 1px 3px 0 rgba(32, 69, 51, 0.05),
+    0 10px 25px -5px rgba(32, 69, 51, 0.08);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.scientific-card-depth:hover {
+  transform: translateY(-2px);
+  border-color: #2F6C50;
+  box-shadow: 
+    0 14px 34px -8px rgba(47, 108, 80, 0.18),
+    0 0 0 1px rgba(47, 108, 80, 0.2);
+}
+
+.gold-gradient-text {
+  background: linear-gradient(135deg, #F3E5AB 0%, #D4AF37 50%, #AA771C 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.gold-metallic-bg {
+  background: linear-gradient(135deg, #E4C882 0%, #C59F54 50%, #AF873B 100%);
+}
+
+.gold-metallic-border {
+  border-image: linear-gradient(135deg, #E4C882, #C59F54, #AF873B) 1;
+}
+
+/* Demo 3: Archival Library Catalog Typography & Visual Language */
+.font-newsreader {
+  font-family: 'Newsreader', Georgia, Cambria, 'Times New Roman', Times, serif;
+}
+
+.font-catalog-mono {
+  font-family: 'IBM Plex Mono', Menlo, Monaco, Consolas, monospace;
+}
+
+/* Faint concentric-ring security paper watermark background */
+.bg-security-rings {
+  background-color: #050B14;
+  background-image: 
+    radial-gradient(circle at 50% 45%, rgba(216, 186, 117, 0.08) 0, rgba(216, 186, 117, 0.08) 1.5px, transparent 2px),
+    radial-gradient(circle at 50% 45%, transparent 0, transparent 48px, rgba(216, 186, 117, 0.07) 49px, transparent 51px),
+    radial-gradient(circle at 50% 45%, transparent 0, transparent 98px, rgba(216, 186, 117, 0.06) 99px, transparent 101px),
+    radial-gradient(circle at 50% 45%, transparent 0, transparent 158px, rgba(216, 186, 117, 0.05) 159px, transparent 161px),
+    radial-gradient(circle at 50% 45%, transparent 0, transparent 228px, rgba(216, 186, 117, 0.04) 229px, transparent 231px),
+    radial-gradient(circle at 50% 45%, transparent 0, transparent 308px, rgba(216, 186, 117, 0.035) 309px, transparent 311px),
+    radial-gradient(circle at 50% 45%, transparent 0, transparent 398px, rgba(216, 186, 117, 0.025) 399px, transparent 401px),
+    radial-gradient(circle at 50% 45%, transparent 0, transparent 498px, rgba(216, 186, 117, 0.018) 499px, transparent 501px),
+    radial-gradient(circle at 50% 45%, transparent 0, transparent 608px, rgba(216, 186, 117, 0.012) 609px, transparent 611px),
+    repeating-linear-gradient(0deg, transparent, transparent 24px, rgba(216, 186, 117, 0.018) 25px),
+    linear-gradient(180deg, #03070E 0%, #061120 50%, #040912 100%);
+}
+
+/* Catalog index card styling */
+.archive-index-card {
+  position: relative;
+  background: #FFFFFF;
+  border: 1px solid #E5E0D5;
+  box-shadow: 0 1px 3px rgba(18, 26, 22, 0.04), 0 8px 24px -6px rgba(18, 26, 22, 0.06);
+  transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+}
+
+.archive-index-card:hover {
+  transform: translateY(-2px);
+  border-color: #C5A059;
+  box-shadow: 0 4px 12px rgba(18, 26, 22, 0.06), 0 14px 32px -8px rgba(197, 160, 89, 0.16);
+}
+
+/* Dotted table-of-contents leader line */
+.toc-leader-dots {
+  flex-grow: 1;
+  border-bottom: 1.5px dotted #C2BCB0;
+  margin: 0 0.5rem 0.25rem 0.5rem;
+  opacity: 0.65;
+}
+
+/* Proposal Hub: Executive Neon Green Lighting & Control Room */
+@keyframes neon-scan-sweep {
+  0% {
+    transform: translateX(-120%) skewX(-15deg);
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.35;
+  }
+  60% {
+    opacity: 0.35;
+  }
+  100% {
+    transform: translateX(250%) skewX(-15deg);
+    opacity: 0;
+  }
+}
+
+.scan-sweep-effect {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, transparent, rgba(0, 255, 136, 0.12), rgba(167, 244, 50, 0.18), transparent);
+  pointer-events: none;
+  animation: neon-scan-sweep 7s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+@keyframes neon-pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(0, 255, 136, 0.7);
+  }
+  50% {
+    opacity: 0.85;
+    transform: scale(1.08);
+    box-shadow: 0 0 10px 3px rgba(0, 255, 136, 0.4);
+  }
+}
+
+.neon-dot-pulsing {
+  animation: neon-pulse 2.2s infinite ease-in-out;
+}
+
+/* Neon buttons */
+.neon-glow-btn {
+  background: #00FF88;
+  color: #030A06;
+  box-shadow: 0 0 16px rgba(0, 255, 136, 0.35), 0 2px 6px rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.neon-glow-btn:hover {
+  background: #33FF9F;
+  box-shadow: 0 0 26px rgba(0, 255, 136, 0.6), 0 0 45px rgba(0, 255, 136, 0.25);
+  transform: translateY(-1px);
+}
+
+.neon-glow-btn-secondary {
+  background: #07150E;
+  color: #E2FCEE;
+  border: 1px solid rgba(0, 255, 136, 0.25);
+  box-shadow: 0 0 10px rgba(0, 255, 136, 0.08);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.neon-glow-btn-secondary:hover {
+  background: #0C2117;
+  border-color: rgba(0, 255, 136, 0.55);
+  box-shadow: 0 0 18px rgba(0, 255, 136, 0.25);
+  color: #FFFFFF;
+}
+
+/* Gradient glow headline text */
+.neon-headline-glow {
+  text-shadow: 0 0 35px rgba(0, 255, 136, 0.22);
+}
+
+/* Display surface for central workspace */
+.neon-workspace-surface {
+  background: linear-gradient(180deg, #07130D 0%, #050E09 100%);
+  border: 1px solid rgba(0, 255, 136, 0.16);
+  box-shadow: 
+    inset 0 1px 0 0 rgba(0, 255, 136, 0.15),
+    0 24px 60px -12px rgba(0, 0, 0, 0.9),
+    0 0 80px -20px rgba(0, 255, 136, 0.06);
+}
+
+/* Accessibility: reduce motion */
+@media (prefers-reduced-motion: reduce) {
+  .scan-sweep-effect,
+  .neon-dot-pulsing {
+    animation: none !important;
+  }
+}
+

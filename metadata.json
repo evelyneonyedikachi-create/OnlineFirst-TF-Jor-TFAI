@@ -1,0 +1,6 @@
+{
+  "name": "Tax Frontier — OnlineFirst Proposal & Journal Platform",
+  "description": "OnlineFirst proposal hub and 3 distinct design concepts for Tax Frontier, jointly published by CITN Umuahia and MOUAU COLMAS.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
